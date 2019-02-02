@@ -1,5 +1,10 @@
 #!/bin/bash
-BATTERY=$(($RANDOM%100))
+if [ -z "$1" ]; then
+	BATTERY=$(($RANDOM%100))
+else
+	BATTERY=$1
+fi
+
 echo $BATTERY > battery
 
 while true; do
