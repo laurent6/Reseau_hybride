@@ -1,0 +1,5 @@
+apt update 
+apt install git 
+apt install make 
+apt-get install gcc build-essential
+
