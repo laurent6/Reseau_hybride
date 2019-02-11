@@ -83,3 +83,5 @@ Link(client='host5:1', core='slirp5')
 
 VSlirp('slirp6', net='192.168.0.0/24')
 Link(client='host6:1', core='slirp6')
+
+StartNemu()
