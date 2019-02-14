@@ -40,7 +40,8 @@ THE SOFTWARE.
 #include "resend.h"
 #include "message.h"
 #include "configuration.h"
-
+/****** CHANGE ******/
+#include "criteria.h"
 unsigned char packet_header[4] = {42, 2};
 
 int split_horizon = 1;
@@ -1039,6 +1040,12 @@ send_hello_noihu(struct interface *ifp, unsigned interval)
         accumulate_int(&ifp->buf, 0);
     }
     end_message(&ifp->buf, MESSAGE_HELLO, ifp->buf.enable_timestamps ? 12 : 6);
+    /**** CHANGE ********/
+    
+   start_message(&ifp->buf, MESSAGE_CRITERIA,  LENGTH_ALL_CRITERIA);
+   push_criteria(&ifp->buf);
+   end_message(&ifp->buf, MESSAGE_CRITERIA,  LENGTH_ALL_CRITERIA);
+   
 }
 
 void
@@ -1158,6 +1165,7 @@ really_buffer_update(struct buffered *buf, struct interface *ifp,
         accumulate_byte(buf, channels_len);
         accumulate_bytes(buf, channels, channels_len);
     }
+    push_criteria(buf); 
     end_message(buf, MESSAGE_UPDATE, len);
     if(flags & 0x80) {
         memcpy(buf->prefix, prefix, 16);

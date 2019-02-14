@@ -274,7 +274,7 @@ kinstall_route(const struct babel_route *route)
     const struct babel_route *rt2 = NULL;
     struct route_stream *stream = NULL;
     int v4 = v4mapped(route->nexthop);
-
+    fprintf(stdout,"install route %s",route->src); 
     debugf("install_route(%s from %s)\n",
            format_prefix(route->src->prefix, route->src->plen),
            format_prefix(route->src->src_prefix, route->src->src_plen));

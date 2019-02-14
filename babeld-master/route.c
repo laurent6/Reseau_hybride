@@ -740,12 +740,15 @@ find_best_route(const unsigned char *prefix, unsigned char plen,
                 const unsigned char *src_prefix, unsigned char src_plen,
                 int feasible, struct neighbour *exclude)
 {
+
     struct babel_route *route, *r;
     int i = find_route_slot(prefix, plen, src_prefix, src_plen, NULL);
 
     if(i < 0)
         return NULL;
-
+  
+    debugf("find best route : prefix %s //   %s \n",src_prefix, format_prefix(prefix,plen));
+    debugf("test debug \n");
     route = routes[i];
     while(route && !route_acceptable(route, feasible, exclude))
         route = route->next;
@@ -844,6 +847,8 @@ update_route(const unsigned char *id,
     struct source *src;
     int metric, feasible;
     int add_metric;
+    printf("\n------------------ prefix %s------------- \n", format_address(src_prefix));
+    // debugf(" prefix %s  : nexthop %s : \n src_prefix %s :",*prefix,*nexthop,*src_prefix);
     int hold_time = MAX((4 * interval) / 100 + interval / 50, 15);
     int is_v4;
     if(memcmp(id, myid, 8) == 0)
@@ -866,7 +871,7 @@ update_route(const unsigned char *id,
         return NULL;
 
     route = find_route(prefix, plen, src_prefix, src_plen, neigh, nexthop);
-
+    
     if(route && memcmp(route->src->id, id, 8) == 0)
         /* Avoid scanning the source table. */
         src = route->src;
