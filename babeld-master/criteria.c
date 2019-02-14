@@ -32,7 +32,6 @@ Julien Massonneau
    Add battery criteria in buffer. 
  **/
 void battery(struct buffered *buf){
-
   unsigned int b=50;
   DO_HTONL(buf->buf + buf->len, MESSAGE_BATTERY); 
   DO_HTONL(buf->buf + buf->len+ sizeof(MESSAGE_BATTERY), b);

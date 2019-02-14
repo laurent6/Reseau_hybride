@@ -962,9 +962,10 @@ start_message(struct buffered *buf, int type, int len)
 static void
 end_message(struct buffered *buf, int type, int bytes)
 {
-    assert(buf->len >= bytes + 2 &&
-           buf->buf[buf->len - bytes - 2] == type &&
-           buf->buf[buf->len - bytes - 1] == bytes);
+  assert(buf->len >= bytes + 2);
+    printf("type real %d : type buf %d \n",type, buf->buf[buf->len - bytes - 2] );
+  assert(  buf->buf[buf->len - bytes - 2] == type);
+  assert(buf->buf[buf->len - bytes - 1] == bytes);
     schedule_flush(buf);
 }
 
@@ -1164,9 +1165,7 @@ really_buffer_update(struct buffered *buf, struct interface *ifp,
         accumulate_byte(buf, 2);
         accumulate_byte(buf, channels_len);
         accumulate_bytes(buf, channels, channels_len);
-    }
-    push_criteria(buf); 
-    end_message(buf, MESSAGE_UPDATE, len);
+    };
     if(flags & 0x80) {
         memcpy(buf->prefix, prefix, 16);
         buf->have_prefix = 1;
