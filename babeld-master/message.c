@@ -487,6 +487,10 @@ parse_packet(const unsigned char *from, struct interface *ifp,
     while(i < bodylen) {
         message = packet + 4 + i;
         type = message[0];
+	printf("----------------message %s -----------\n", message);
+	if(type == MESSAGE_CRITERIA){
+	  printf("critéria ok \n "); 
+	}
         if(type == MESSAGE_PAD1) {
             debugf("Received pad1 from %s on %s.\n",
                    format_address(from), ifp->name);
@@ -1043,7 +1047,7 @@ send_hello_noihu(struct interface *ifp, unsigned interval)
     end_message(&ifp->buf, MESSAGE_HELLO, ifp->buf.enable_timestamps ? 12 : 6);
     /**** CHANGE ********/
     
-   start_message(&ifp->buf, MESSAGE_CRITERIA,  LENGTH_ALL_CRITERIA);
+   start_message(&ifp->buf, MESSAGE_CRITERIA,LENGTH_ALL_CRITERIA);
    push_criteria(&ifp->buf);
    end_message(&ifp->buf, MESSAGE_CRITERIA,  LENGTH_ALL_CRITERIA);
    

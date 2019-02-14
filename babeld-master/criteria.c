@@ -32,10 +32,13 @@ Julien Massonneau
    Add battery criteria in buffer. 
  **/
 void battery(struct buffered *buf){
-  unsigned int b=50;
-  DO_HTONL(buf->buf + buf->len, MESSAGE_BATTERY); 
-  DO_HTONL(buf->buf + buf->len+ sizeof(MESSAGE_BATTERY), b);
-  buf->len +=8;
+  int b=100;
+  buf->buf[buf->len]=MESSAGE_BATTERY;
+  buf->len +=4;
+  buf->buf[buf->len]=b;
+  buf->len +=4;
+  int t=0;
+  t++; 
 }
 /**
    Accumulate all criteria. 
