@@ -432,7 +432,8 @@ void
 parse_packet(const unsigned char *from, struct interface *ifp,
              const unsigned char *packet, int packetlen)
 {
-    int i;
+   
+    int i ;
     const unsigned char *message;
     unsigned char type, len;
     int bodylen;
@@ -1032,7 +1033,7 @@ send_hello_noihu(struct interface *ifp, unsigned interval)
     debugf("Sending hello %d (%d) to %s.\n",
            ifp->hello_seqno, interval, ifp->name);
 
-    start_message(&ifp->buf, MESSAGE_HELLO, ifp->buf.enable_timestamps ? 12 : 6);
+    start_message(&ifp->buf, MESSAGE_CRITERIA, ifp->buf.enable_timestamps ? 12 : 6);
     ifp->buf.hello = ifp->buf.len - 2;
     accumulate_short(&ifp->buf, 0);
     accumulate_short(&ifp->buf, ifp->hello_seqno);
@@ -1044,12 +1045,12 @@ send_hello_noihu(struct interface *ifp, unsigned interval)
         accumulate_byte(&ifp->buf, 4);
         accumulate_int(&ifp->buf, 0);
     }
-    end_message(&ifp->buf, MESSAGE_HELLO, ifp->buf.enable_timestamps ? 12 : 6);
+    end_message(&ifp->buf, MESSAGE_CRITERIA, ifp->buf.enable_timestamps ? 12 : 6);
     /**** CHANGE ********/
     
-   start_message(&ifp->buf, MESSAGE_CRITERIA,LENGTH_ALL_CRITERIA);
+   /*start_message(&ifp->buf, MESSAGE_CRITERIA,LENGTH_ALL_CRITERIA);
    push_criteria(&ifp->buf);
-   end_message(&ifp->buf, MESSAGE_CRITERIA,  LENGTH_ALL_CRITERIA);
+   end_message(&ifp->buf, MESSAGE_CRITERIA,  LENGTH_ALL_CRITERIA);*/
    
 }
 
