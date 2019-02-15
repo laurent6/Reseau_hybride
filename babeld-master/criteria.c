@@ -33,9 +33,11 @@ Julien Massonneau
  **/
 void battery(struct buffered *buf){
   int b=100;
+  printf("before %d  \n", buf->len);
   buf->buf[buf->len++]= MESSAGE_BATTERY;
   buf->buf[buf->len++]= 1;
   buf->buf[buf->len++]= b;
+  printf("after %d \n", buf->len);
 }
 /**
    Accumulate all criteria. 
