@@ -33,12 +33,9 @@ Julien Massonneau
  **/
 void battery(struct buffered *buf){
   int b=100;
-  buf->buf[buf->len]=MESSAGE_BATTERY;
-  buf->len +=4;
-  buf->buf[buf->len]=b;
-  buf->len +=4;
-  int t=0;
-  t++; 
+  buf->buf[buf->len++]= MESSAGE_BATTERY;
+  buf->buf[buf->len++]= 1;
+  buf->buf[buf->len++]= b;
 }
 /**
    Accumulate all criteria. 

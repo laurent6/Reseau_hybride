@@ -489,7 +489,11 @@ parse_packet(const unsigned char *from, struct interface *ifp,
         message = packet + 4 + i;
         type = message[0];
 	if(type == MESSAGE_CRITERIA){
-	  printf("critéria ok \n "); 
+	  printf(" type %c \n ", type);
+	  printf(" length  %c \n", message + 1 );
+	  printf ("new type %c \n", message + 2);
+	  printf("new length %c \n", message + 3);
+	  printf(" battery %c \n", message +4);
 	}
         if(type == MESSAGE_PAD1) {
             debugf("Received pad1 from %s on %s.\n",
