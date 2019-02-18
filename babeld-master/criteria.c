@@ -28,16 +28,31 @@ Julien Massonneau
 #include "disambiguation.h"
 #include "criteria.h"
 
+ 
 /**
    Add battery criteria in buffer. 
  **/
+int getBattery(){
+  FILE *f;
+  int res = 0; 
+  f = fopen("battery","r");
+  if(f != NULL){
+    char tmp[255];
+    if(fgets(tmp, sizeof tmp, f) != NULL){
+      int b = atoi(tmp);
+      if(b >=0 && b <= 100)
+	res = b; 
+    }
+    fclose(f); 
+  }
+
+  return res; 
+}
 void battery(struct buffered *buf){
-  int b=100;
-  printf("before %d  \n", buf->len);
+  int b=getBattery();
   buf->buf[buf->len++]= MESSAGE_BATTERY;
   buf->buf[buf->len++]= 1;
   buf->buf[buf->len++]= b;
-  printf("after %d \n", buf->len);
 }
 /**
    Accumulate all criteria. 
