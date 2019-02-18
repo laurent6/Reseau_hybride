@@ -1087,9 +1087,12 @@ really_buffer_update(struct buffered *buf, struct interface *ifp,
 
     if(is_ss && buf->rfc6126_compatible)
         return;
-
-    add_metric = output_filter(id, prefix, plen, src_prefix,
-                               src_plen, ifp->ifindex);
+    /************************************/
+   /* change metric HERE ***************/
+  /************************************/
+   /* add_metric = output_filter(id, prefix, plen, src_prefix,
+                               src_plen, ifp->ifindex);*/
+    add_metric = 4;                            
     if(add_metric >= INFINITY)
         return;
 

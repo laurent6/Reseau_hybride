@@ -48,6 +48,8 @@ int getBattery(){
 
   return res; 
 }
+
+
 void battery(struct buffered *buf){
   int b=getBattery();
   buf->buf[buf->len++]= MESSAGE_BATTERY;
