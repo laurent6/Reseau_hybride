@@ -646,9 +646,15 @@ parse_packet(const unsigned char *from, struct interface *ifp,
                     have_v4_prefix = have_v6_prefix = 0;
                 goto fail;
             }
+            printf("itd the first printf \n");
             DO_NTOHS(interval, message + 6);
             DO_NTOHS(seqno, message + 8);
+
             DO_NTOHS(metric, message + 10);
+            printf("why \n");
+            debugf("-----Metric %hu",metric);
+            printf("-----Metric %hu",metric);
+
             if(message[5] == 0 ||
                (message[2] == 1 ? have_v4_prefix : have_v6_prefix))
                 rc = network_prefix(message[2], message[4], message[5],
@@ -1092,7 +1098,7 @@ really_buffer_update(struct buffered *buf, struct interface *ifp,
   /************************************/
    /* add_metric = output_filter(id, prefix, plen, src_prefix,
                                src_plen, ifp->ifindex);*/
-    add_metric = 4;                            
+    add_metric = 6;
     if(add_metric >= INFINITY)
         return;
 
