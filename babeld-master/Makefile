@@ -13,12 +13,14 @@ SRCS = babeld.c net.c kernel.c util.c interface.c source.c neighbour.c \
        route.c xroute.c message.c resend.c configuration.c local.c \
        disambiguation.c rule.c criteria.c
 
-OBJS = babeld.o net.o kernel.o util.o interface.o source.o neighbour.o \
+OBJS =  babeld.o net.o kernel.o util.o interface.o source.o neighbour.o \
        route.o xroute.o message.o resend.o configuration.o local.o \
        disambiguation.o rule.o criteria.o
 
-babeld: $(OBJS)
+
+babeld: $(OBJS) 
 	$(CC) $(CFLAGS) $(LDFLAGS) -o babeld $(OBJS) $(LDLIBS)
+
 
 babeld.o: babeld.c version.h
 
@@ -38,7 +40,7 @@ babeld.html: babeld.man
 
 .PHONY: all install install.minimal uninstall clean
 
-all: babeld babeld.man
+all: babeld  babeld.man
 
 install.minimal: babeld
 	-rm -f $(TARGET)$(PREFIX)/bin/babeld

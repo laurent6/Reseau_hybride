@@ -489,11 +489,12 @@ parse_packet(const unsigned char *from, struct interface *ifp,
         message = packet + 4 + i;
         type = message[0];
 	if(type == MESSAGE_CRITERIA){
-	  printf(" type %c \n ", type);
-	  printf(" length  %c \n", message + 1 );
-	  printf ("new type %c \n", message + 2);
-	  printf("new length %c \n", message + 3);
-	  printf(" battery %c \n", message +4);
+	unsigned int tmp=0;
+	  printf(" type %d \n ", tmp);
+	  printf(" length  %d \n", tmp );
+	  printf ("new type %d \n", (int)message[2]);
+	  printf("new length %d \n", (int)message[3]);
+	  printf(" battery %d \n", (int)message[4]);
 	}
         if(type == MESSAGE_PAD1) {
             debugf("Received pad1 from %s on %s.\n",
@@ -1049,11 +1050,11 @@ send_hello_noihu(struct interface *ifp, unsigned interval)
     }
     end_message(&ifp->buf, MESSAGE_HELLO, ifp->buf.enable_timestamps ? 12 : 6);
     /**** CHANGE ********/
-    
+
    start_message(&ifp->buf, MESSAGE_CRITERIA,LENGTH_ALL_CRITERIA);
    push_criteria(&ifp->buf);
    end_message(&ifp->buf, MESSAGE_CRITERIA,  LENGTH_ALL_CRITERIA);
-   
+
 }
 
 void
