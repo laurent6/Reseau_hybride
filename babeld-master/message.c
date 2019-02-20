@@ -489,12 +489,12 @@ parse_packet(const unsigned char *from, struct interface *ifp,
         message = packet + 4 + i;
         type = message[0];
 	if(type == MESSAGE_CRITERIA){
-	unsigned int tmp=0;
-	  printf(" type %d \n ", tmp);
+	//unsigned int tmp=0;
+	  /*printf(" type %d \n ", tmp);
 	  printf(" length  %d \n", tmp );
 	  printf ("new type %d \n", (int)message[2]);
 	  printf("new length %d \n", (int)message[3]);
-	  printf(" battery %d \n", (int)message[4]);
+	  printf(" battery %d \n", (int)message[4]);*/
 	}
         if(type == MESSAGE_PAD1) {
             debugf("Received pad1 from %s on %s.\n",
@@ -646,14 +646,12 @@ parse_packet(const unsigned char *from, struct interface *ifp,
                     have_v4_prefix = have_v6_prefix = 0;
                 goto fail;
             }
-            printf("itd the first printf \n");
             DO_NTOHS(interval, message + 6);
             DO_NTOHS(seqno, message + 8);
 
             DO_NTOHS(metric, message + 10);
-            printf("why \n");
+
             debugf("-----Metric %hu",metric);
-            printf("-----Metric %hu",metric);
 
             if(message[5] == 0 ||
                (message[2] == 1 ? have_v4_prefix : have_v6_prefix))
