@@ -651,7 +651,7 @@ parse_packet(const unsigned char *from, struct interface *ifp,
 
             DO_NTOHS(metric, message + 10);
 
-            debugf("-----Metric %hu",metric);
+            fprintf(stdout, "-----Metric %hu",metric);
 
             if(message[5] == 0 ||
                (message[2] == 1 ? have_v4_prefix : have_v6_prefix))
@@ -1716,7 +1716,7 @@ send_request(struct buffered *buf,
              const unsigned char *prefix, unsigned char plen,
              const unsigned char *src_prefix, unsigned char src_plen)
 {
-    int v4, pb, spb, len;
+    /*int v4, pb, spb, len;
     int is_ss = !is_default(src_prefix, src_plen);
 
     if(is_ss && buf->rfc6126_compatible)
@@ -1757,7 +1757,7 @@ send_request(struct buffered *buf,
         else
             accumulate_bytes(buf, src_prefix, spb);
     }
-    end_message(buf, MESSAGE_REQUEST, len);
+    end_message(buf, MESSAGE_REQUEST, len);*/
 }
 
 void
