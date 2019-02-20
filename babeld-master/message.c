@@ -1101,7 +1101,7 @@ really_buffer_update(struct buffered *buf, struct interface *ifp,
         return;
 
     metric = MIN(metric + add_metric, INFINITY);
-
+    fprintf(stdout, "%d\n", metric );
     /* Worst case */
     ensure_space(buf, 20 + 12 + 28 + 18);
 
