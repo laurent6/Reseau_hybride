@@ -493,8 +493,8 @@ parse_packet(const unsigned char *from, struct interface *ifp,
 	  /*printf(" type %d \n ", tmp);
 	  printf(" length  %d \n", tmp );
 	  printf ("new type %d \n", (int)message[2]);
-	  printf("new length %d \n", (int)message[3]);
-	  printf(" battery %d \n", (int)message[4]);*/
+	  printf("new length %d \n", (int)message[3]);*/
+	  debugf(" receive type :%d , battery  %d \n",type, (int)message[4]);
 	}
         if(type == MESSAGE_PAD1) {
             debugf("Received pad1 from %s on %s.\n",
@@ -651,7 +651,7 @@ parse_packet(const unsigned char *from, struct interface *ifp,
 
             DO_NTOHS(metric, message + 10);
 
-            fprintf(stdout, "-----Metric %hu",metric);
+            debugf( "receive metric update %hu",metric);
 
             if(message[5] == 0 ||
                (message[2] == 1 ? have_v4_prefix : have_v6_prefix))
@@ -1056,6 +1056,7 @@ send_hello_noihu(struct interface *ifp, unsigned interval)
     /**** CHANGE ********/
 
    start_message(&ifp->buf, MESSAGE_CRITERIA,LENGTH_ALL_CRITERIA);
+   debugf(" Send Hello criteria \n");
    push_criteria(&ifp->buf);
    end_message(&ifp->buf, MESSAGE_CRITERIA,  LENGTH_ALL_CRITERIA);
 
@@ -1094,14 +1095,18 @@ really_buffer_update(struct buffered *buf, struct interface *ifp,
     /************************************/
    /* change metric HERE ***************/
   /************************************/
-   /* add_metric = output_filter(id, prefix, plen, src_prefix,
-                               src_plen, ifp->ifindex);*/
-    add_metric = 6;
+   add_metric = output_filter(id, prefix, plen, src_prefix,
+                               src_plen, ifp->ifindex);
+    debugf("metric before battery criteria : %d\n", add_metric);
+    update_metric_battery_criteria(&add_metric);
+    debugf("metric after battery criteria : %d \n", add_metric);
+  /**END_CHANGE **/
+
     if(add_metric >= INFINITY)
         return;
 
-    metric = MIN(metric + add_metric, INFINITY);
-    fprintf(stdout, "%d\n", metric );
+    metric = MIN(metric+ add_metric, INFINITY);
+    //fprintf(stdout, "%d\n", metric );
     /* Worst case */
     ensure_space(buf, 20 + 12 + 28 + 18);
 
@@ -1467,18 +1472,21 @@ send_update(struct interface *ifp, int urgent,
             const unsigned char *prefix, unsigned char plen,
             const unsigned char *src_prefix, unsigned char src_plen)
 {
-    if(ifp == NULL) {
+   if(ifp == NULL) {
         struct interface *ifp_aux;
         struct babel_route *route;
         FOR_ALL_INTERFACES(ifp_aux)
             send_update(ifp_aux, urgent, prefix, plen, src_prefix, src_plen);
         if(prefix) {
             /* Since flushupdates only deals with non-wildcard interfaces, we
-               need to do this now. */
+               need to do this now.*/
             route = find_installed_route(prefix, plen, src_prefix, src_plen);
-            if(route && route_metric(route) < INFINITY)
-                satisfy_request(prefix, plen, src_prefix, src_plen,
-                                route->src->seqno, route->src->id, NULL);
+
+            if(route && route_metric(route) < INFINITY){
+              satisfy_request(prefix, plen, src_prefix, src_plen,
+                              route->src->seqno, route->src->id, NULL);
+            }
+
         }
         return;
     }
@@ -1716,7 +1724,7 @@ send_request(struct buffered *buf,
              const unsigned char *prefix, unsigned char plen,
              const unsigned char *src_prefix, unsigned char src_plen)
 {
-    /*int v4, pb, spb, len;
+    int v4, pb, spb, len;
     int is_ss = !is_default(src_prefix, src_plen);
 
     if(is_ss && buf->rfc6126_compatible)
@@ -1757,7 +1765,7 @@ send_request(struct buffered *buf,
         else
             accumulate_bytes(buf, src_prefix, spb);
     }
-    end_message(buf, MESSAGE_REQUEST, len);*/
+    end_message(buf, MESSAGE_REQUEST, len);
 }
 
 void

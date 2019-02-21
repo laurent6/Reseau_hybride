@@ -1,9 +1,9 @@
 /***
 
 
-@author Laurent BOUQUIN 
-Virgile Chatelain 
-Julien Massonneau 
+@author Laurent BOUQUIN
+Virgile Chatelain
+Julien Massonneau
 
  **/
 #include <stdlib.h>
@@ -28,42 +28,55 @@ Julien Massonneau
 #include "disambiguation.h"
 #include "criteria.h"
 
- 
-/**
-   Add battery criteria in buffer. 
- **/
+
+/*
+Get battery status.
+@return -1 if battery doesn't exist.
+*/
 int getBattery(){
   FILE *f;
-  int res = 0; 
+  int res = -1;
   f = fopen("battery","r");
   if(f != NULL){
     char tmp[255];
     if(fgets(tmp, sizeof tmp, f) != NULL){
       int b = atoi(tmp);
       if(b >=0 && b <= 100)
-	res = b; 
+	res = b;
     }
-    fclose(f); 
+    fclose(f);
   }
 
-  return res; 
+  return res;
 }
 
-
-void battery(struct buffered *buf){
-  int b=getBattery();
+/**
+   Add battery criteria in buffer.
+ **/
+void push_battery_buff(struct buffered *buf){
+  int battery=getBattery();
+  debugf("update buffer battery Criteria : %d \n",battery);
   buf->buf[buf->len++]= MESSAGE_BATTERY;
   buf->buf[buf->len++]= 1;
-  buf->buf[buf->len++]= b;
+  buf->buf[buf->len++]= battery;
 }
+
+void update_metric_battery_criteria(int * metric ){
+  int battery = getBattery();
+  if(battery <= 15)
+      *metric = INFINITY -10;
+
+}
+
+
 /**
-   Accumulate all criteria. 
-   WARNING : change LENGTH_ALL_CRITERIA in header file when you change this function 
+   Accumulate all criteria.
+   WARNING : change LENGTH_ALL_CRITERIA in header file when you change this function
  **/
 void push_criteria(struct buffered *buf){
 
-  battery(buf); 
-  
+  push_battery_buff(buf);
+
 
 
 }
