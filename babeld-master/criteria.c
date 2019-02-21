@@ -64,7 +64,7 @@ void push_battery_buff(struct buffered *buf){
 void update_metric_battery_criteria(int * metric ){
   int battery = getBattery();
   if(battery <= 15)
-      *metric += INFINITY -10;
+      *metric += 16;
 
 }
 
