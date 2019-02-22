@@ -56,14 +56,14 @@ Link("host4:0", "h4wic")
 Link("host5:0", "h5wic")
 Link("host6:0", "h6wic")
 
-Join("h2wic", "h1wic")
+Join("h1wic", "h2wic")
 
-Join("h1wic", "h4wic")
-Join("h1wic", "h5wic")
+Join("h2wic", "h3wic")
+Join("h2wic", "h4wic")
 
-Join("h5wic", "h3wic")
-Join("h5wic", "h4wic")
-Join("h5wic", "h6wic")
+Join("h4wic", "h3wic")
+Join("h4wic", "h5wic")
+Join("h4wic", "h6wic")
 
 # connect to internet, aim to install protocol. 
 VSlirp('slirp1', net='192.168.0.0/24')
