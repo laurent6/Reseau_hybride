@@ -495,10 +495,11 @@ parse_packet(const unsigned char *from, struct interface *ifp,
 	  printf(" length  %d \n", tmp );
 	  printf ("new type %d \n", (int)message[2]);
 	  printf("new length %d \n", (int)message[3]);*/
+    disable_metric_critical(neigh);
 	  debugf(" receive type :%d , battery  %d \n",type, (int)message[4]);
     int battery = (int)message[4];
     if(is_battery_critical(battery)){
-      set_add_metric_critical(neigh);
+    //  set_add_metric_critical(neigh);
     } else if( is_neighboor_critical(neigh)){
       disable_metric_critical(neigh);
     }

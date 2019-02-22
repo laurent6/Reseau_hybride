@@ -1032,7 +1032,10 @@ consider_route(struct babel_route *route)
 {
     struct babel_route *installed;
     struct xroute *xroute;
-
+    debugf(" consider receive route : %s with metric : %d from ",
+     format_prefix(route->src->prefix,route->src->plen),
+     route_metric(route),
+    format_address(route->neigh->address));
     if(route->installed)
         return;
 
