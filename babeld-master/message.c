@@ -488,6 +488,7 @@ parse_packet(const unsigned char *from, struct interface *ifp,
     while(i < bodylen) {
         message = packet + 4 + i;
         type = message[0];
+        /*****************CAHNGE **********************/
 	if(type == MESSAGE_CRITERIA){
 	//unsigned int tmp=0;
 	  /*printf(" type %d \n ", tmp);
@@ -495,6 +496,10 @@ parse_packet(const unsigned char *from, struct interface *ifp,
 	  printf ("new type %d \n", (int)message[2]);
 	  printf("new length %d \n", (int)message[3]);*/
 	  debugf(" receive type :%d , battery  %d \n",type, (int)message[4]);
+    int battery = (int)message[4];
+    if(is_battery_critical(battery)){
+      set_add_metric_critical(battery,neigh);
+    }
 	}
         if(type == MESSAGE_PAD1) {
             debugf("Received pad1 from %s on %s.\n",
@@ -651,7 +656,7 @@ parse_packet(const unsigned char *from, struct interface *ifp,
 
             DO_NTOHS(metric, message + 10);
 
-            debugf( "receive metric update %hu",metric);
+            debugf( "\n\n --- receive metric update %hu ---- \n\n",metric);
 
             if(message[5] == 0 ||
                (message[2] == 1 ? have_v4_prefix : have_v6_prefix))

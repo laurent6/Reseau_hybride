@@ -45,13 +45,22 @@ struct neighbour {
     struct timeval rtt_time;
     struct interface *ifp;
     struct buffered buf;
+    /******** CHANGE **********/
+    unsigned  add_metric_critical;
+    /*** END CHANGE ************/
 };
 
 extern struct neighbour *neighs;
 
+
+/******** CHANGE ********/
+#define ADD_CRITICIAL 1024
+
+/********** END CHANGE  ******/
 #define FOR_ALL_NEIGHBOURS(_neigh) \
     for(_neigh = neighs; _neigh; _neigh = _neigh->next)
 
+void set_add_metric_critical(int status, struct  neighbour *neigh);
 int neighbour_valid(struct neighbour *neigh);
 void flush_neighbour(struct neighbour *neigh);
 struct neighbour *find_neighbour(const unsigned char *address,

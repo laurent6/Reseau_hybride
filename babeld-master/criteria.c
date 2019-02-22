@@ -64,10 +64,13 @@ void push_battery_buff(struct buffered *buf){
 void update_metric_battery_criteria(int * metric ){
   int battery = getBattery();
   if(battery <= 15)
-      *metric += 16;
+      *metric += 1024;
 
 }
 
+int is_battery_critical(int b){
+    return b <=15;
+}
 
 /**
    Accumulate all criteria.

@@ -43,7 +43,7 @@ THE SOFTWARE.
 
 struct babel_route **routes = NULL;
 static int route_slots = 0, max_route_slots = 0;
-int kernel_metric = 0, reflect_kernel_metric = 0;
+int kernel_metric = 0, reflect_kernel_metric = 1;
 int allow_duplicates = -1;
 int diversity_kind = DIVERSITY_NONE;
 int diversity_factor = 256;     /* in units of 1/256 */
@@ -847,7 +847,7 @@ update_route(const unsigned char *id,
     struct source *src;
     int metric, feasible;
     int add_metric;
-    
+
     int hold_time = MAX((4 * interval) / 100 + interval / 50, 15);
     int is_v4;
     if(memcmp(id, myid, 8) == 0)

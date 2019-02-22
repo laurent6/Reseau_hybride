@@ -41,6 +41,17 @@ THE SOFTWARE.
 
 struct neighbour *neighs = NULL;
 
+void set_add_metric_critical(int status, struct  neighbour *neigh){
+  if (status <=15){
+    neigh->add_metric_critical = ADD_CRITICIAL;
+  } else{
+    neigh->add_metric_critical = 0;
+  }
+
+}
+
+
+
 static struct neighbour *
 find_neighbour_nocreate(const unsigned char *address, struct interface *ifp)
 {
@@ -372,7 +383,8 @@ neighbour_cost(struct neighbour *neigh)
     }
 
     cost += neighbour_rttcost(neigh);
-
+    /*******CHANGE *******/
+    cost +=  neigh->add_metric_critical; 
     return MIN(cost, INFINITY);
 }
 
