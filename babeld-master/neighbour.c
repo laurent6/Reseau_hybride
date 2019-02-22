@@ -384,7 +384,8 @@ neighbour_cost(struct neighbour *neigh)
 
     cost += neighbour_rttcost(neigh);
     /*******CHANGE *******/
-    cost +=  neigh->add_metric_critical; 
+    cost +=  neigh->add_metric_critical;
+    /******* END CHANGE *******/ 
     return MIN(cost, INFINITY);
 }
 
