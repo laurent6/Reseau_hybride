@@ -498,7 +498,9 @@ parse_packet(const unsigned char *from, struct interface *ifp,
 	  debugf(" receive type :%d , battery  %d \n",type, (int)message[4]);
     int battery = (int)message[4];
     if(is_battery_critical(battery)){
-      set_add_metric_critical(battery,neigh);
+      set_add_metric_critical(neigh);
+    } else if( is_neighboor_critical(neigh)){
+      disable_metric_critical(neigh);
     }
 	}
         if(type == MESSAGE_PAD1) {
@@ -1102,7 +1104,7 @@ really_buffer_update(struct buffered *buf, struct interface *ifp,
   /************************************/
    add_metric = output_filter(id, prefix, plen, src_prefix,
                                src_plen, ifp->ifindex);
-    debugf("metric before battery criteria : %d\n", add_metric);
+    debugf("metric before battery criteria : %d ifp->cost : %d\n", add_metric, ifp->cost);
     update_metric_battery_criteria(&add_metric,ifp->cost);
     debugf("metric after battery criteria : %d \n", add_metric);
   /**END_CHANGE **/
@@ -1488,6 +1490,9 @@ send_update(struct interface *ifp, int urgent,
             route = find_installed_route(prefix, plen, src_prefix, src_plen);
 
             if(route && route_metric(route) < INFINITY){
+              debugf("ip :  %s metric %d",
+              format_prefix(route->src->prefix, route->src->plen),
+                route_metric(route));
               satisfy_request(prefix, plen, src_prefix, src_plen,
                               route->src->seqno, route->src->id, NULL);
             }

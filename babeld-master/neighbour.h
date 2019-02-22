@@ -59,8 +59,12 @@ extern struct neighbour *neighs;
 /********** END CHANGE  ******/
 #define FOR_ALL_NEIGHBOURS(_neigh) \
     for(_neigh = neighs; _neigh; _neigh = _neigh->next)
+/*******CHANGE *******/
+void set_add_metric_critical( struct  neighbour *neigh);
+void disable_metric_critical(struct  neighbour *neigh);
+int is_neighboor_critical(struct  neighbour *neigh);
 
-void set_add_metric_critical(int status, struct  neighbour *neigh);
+/********* END CHANGE *****/
 int neighbour_valid(struct neighbour *neigh);
 void flush_neighbour(struct neighbour *neigh);
 struct neighbour *find_neighbour(const unsigned char *address,

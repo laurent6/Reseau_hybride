@@ -40,14 +40,21 @@ THE SOFTWARE.
 #include "local.h"
 
 struct neighbour *neighs = NULL;
-
-void set_add_metric_critical(int status, struct  neighbour *neigh){
-  if (status <=15){
+/*******CAHNGE **************/
+/*
+IF neighbour have difficuty to send packet we increase metric.
+*/
+void set_add_metric_critical( struct  neighbour *neigh){
     neigh->add_metric_critical = neigh->txcost*3;
-  } else{
-    neigh->add_metric_critical = 0;
-  }
+}
+/**
+**/
+void disable_metric_critical(struct  neighbour *neigh){
+    neigh->add_metric_critical =0;
+}
 
+int is_neighboor_critical(struct  neighbour *neigh){
+  return neigh->add_metric_critical >0; 
 }
 
 
