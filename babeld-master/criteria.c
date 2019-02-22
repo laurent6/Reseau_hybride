@@ -61,10 +61,10 @@ void push_battery_buff(struct buffered *buf){
   buf->buf[buf->len++]= battery;
 }
 
-void update_metric_battery_criteria(int * metric ){
+void update_metric_battery_criteria(int * metric, int cost ){
   int battery = getBattery();
   if(battery <= 15)
-      *metric += 1024;
+      *metric += (cost*3);
 
 }
 

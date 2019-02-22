@@ -43,7 +43,7 @@ struct neighbour *neighs = NULL;
 
 void set_add_metric_critical(int status, struct  neighbour *neigh){
   if (status <=15){
-    neigh->add_metric_critical = ADD_CRITICIAL;
+    neigh->add_metric_critical = neigh->txcost*3;
   } else{
     neigh->add_metric_critical = 0;
   }
@@ -385,7 +385,7 @@ neighbour_cost(struct neighbour *neigh)
     cost += neighbour_rttcost(neigh);
     /*******CHANGE *******/
     cost +=  neigh->add_metric_critical;
-    /******* END CHANGE *******/ 
+    /******* END CHANGE *******/
     return MIN(cost, INFINITY);
 }
 
