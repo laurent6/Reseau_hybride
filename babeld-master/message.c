@@ -1107,7 +1107,7 @@ really_buffer_update(struct buffered *buf, struct interface *ifp,
    add_metric = output_filter(id, prefix, plen, src_prefix,
                                src_plen, ifp->ifindex);
     debugf("metric before battery criteria : %d ifp->cost : %d\n", add_metric, ifp->cost);
-    if(metric >0)
+    if(metric >0 && metric != 256)
       update_metric_battery_criteria(&add_metric);
     debugf("metric after battery criteria : %d \n", add_metric);
   /**END_CHANGE **/
