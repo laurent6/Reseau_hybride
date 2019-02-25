@@ -65,8 +65,8 @@ void update_metric_battery_criteria(int * metric ){
   int battery = getBattery();
   if(battery <= 15 && *metric < (int)INFINITY/2){
       *metric += (int)INFINITY/2;
-  } 
   }
+  
 
 
 }
