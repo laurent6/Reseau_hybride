@@ -740,13 +740,13 @@ parse_packet(const unsigned char *from, struct interface *ifp,
             if(rc < 0)
                 goto done;
             is_ss = !is_default(src_prefix, src_plen);
-            debugf("Received update%s%s for dst %s%s%s from %s on %s.\n",
+            debugf("Received update %s%s for dst %s%s%s from %s on %s, metric : %d.\n",
                    (message[3] & 0x80) ? "/prefix" : "",
                    (message[3] & 0x40) ? "/id" : "",
                    format_prefix(prefix, plen),
                    is_ss ? " src " : "",
                    is_ss ? format_prefix(src_prefix, src_plen) : "",
-                   format_address(from), ifp->name);
+                   format_address(from), ifp->name,metric);
 
             if(message[2] == 1) {
                 if(!ifp->ipv4)
@@ -1103,10 +1103,12 @@ really_buffer_update(struct buffered *buf, struct interface *ifp,
     /************************************/
    /* change metric HERE ***************/
   /************************************/
+  debugf("src_pref : %s dest : %s, %hu",format_prefix(src_prefix,src_plen), format_prefix(prefix,plen), metric);
    add_metric = output_filter(id, prefix, plen, src_prefix,
                                src_plen, ifp->ifindex);
     debugf("metric before battery criteria : %d ifp->cost : %d\n", add_metric, ifp->cost);
-    update_metric_battery_criteria(&add_metric);
+    if(metric >0)
+      update_metric_battery_criteria(&add_metric);
     debugf("metric after battery criteria : %d \n", add_metric);
   /**END_CHANGE **/
 
