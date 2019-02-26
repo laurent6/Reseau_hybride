@@ -6,7 +6,7 @@ from os import popen
 from re import match
 import sys
 import time
-
+import string
 process=0
 all_ip_address = dict([("host1","2001:db8:3c4d:1::1/128"),
                    ("host2","2001:db8:3c4d:2::1/128"),
@@ -25,28 +25,36 @@ all_mac_address = dict([("host1","fe80::a000:ff:fe00:1"),
                     ("host6","fe80::a000:ff:fe00:b"),
                     ("host7","fe80::a000:ff:fe00:d"),
     ])
+
 def startB(interface):
+    print("Start Babeld protocol", end='')
     os.chdir("../")
-    print(os.getcwd())
-    command = "./babeld "+ interface + "> /dev/null 2>&1"
-    os.system("rm -f /var/run/babeld.pid")
-    process = subprocess.Popen(command, shell=True)
+    subprocess.run("rm -f /var/run/babeld.pid > /dev/null 2>&1", stderr=None, shell=True)
+
+    command = "ifdown "+ interface
+    os.system(command)
+    command = "ifup "+ interface
+    os.system(command)
+    command = "./babeld " + interface + "> /dev/null 2>&1"
+    process = subprocess.Popen(command, shell=True,  stderr=None, stdout=None)
+    print(" Done !")
     #os.system("./babeld ens3 >  /dev/null 2>&1")
 
 
 def stopB():
-    os.system("rm -f /var/run/babeld.pid")
+    print("Stop babeld protocol ... ", end='')
+    os.system("rm -f /var/run/babeld.pid > /dev/null 2>&1")
     if process != 0:
         process.terminate()
+    print("Done ! ")
 
 def get_routes():
     rtr_table = [elem for elem in popen("route -6")]
     del rtr_table[0]
-    res = []
+    res = {}
     for i in range(1, len(rtr_table)):
         route = rtr_table[i].split()
-        res[i-1][0] = route[0]  #destination
-        res[i-1][1] = route[1]  #nextHop
+        res[route[0]] = route[1]  #destination
 
     return res
 
@@ -54,38 +62,66 @@ def check_have_all_route():
     routes = get_routes()
     number_of_route = len(all_ip_address)
     cop_list_adress = all_ip_address.copy()
-    for route in routes:
-        if route[0] in cop_list_adress.values():
+    for key,value in routes.items():
+        if key in cop_list_adress.values():
             del cop_list_adress[list(cop_list_adress.
                                      keys())[list(cop_list_adress.values()).
-                                        index(route[0])]]
+                                        index(key)]]
 
     return len(cop_list_adress) == 0
 
+def match_ip_mac(hostname_ip, hostname_mac):
+    rtr_table = get_routes()
+    for key, value in rtr_table.items():
+        destination = key
+        nexthop = value
+        if destination == all_ip_address[hostname_ip]:
+            if nexthop == all_mac_address[hostname_mac]:
+                return True
+            
+    return False
+
+def print_all_routes():
+    rtr_table = get_routes()
+    for destination, nexthop in rtr_table.items():
+        print(" destination : " + destination + " nexthop : "+nexthop)
 
 def test_downBattery():
+    print("\033[1m"+"TEST BATTERY CRITERIA".center(80) + "\033[0m")
+    print(" \t Make sure that host5's battery is upper than 15% and all host are up")
+    input("Press Enter to continue... ")
     startB("ens3")
+    print("Check all routes ... ")
+    start_time = time.time()
     while not check_have_all_route():
         time.sleep(5)
+        if(time.time() - start_time)> 30:
+            print("Failed")
+            exit(1)
 
+    start_time = time.time()
+    while not match_ip_mac("host7", "host5"):
+        time.sleep(5)
+        if (time.time() - start_time) > 30:
+            print("Failed")
+            exit(1)
 
-    rtr_table = get_routes()
-    for i in range(0,len(rtr_table)):
-        destination = rtr_table[i][0]
-        nexthop = rtr_table[i][1]
-        try:
-            if(destination == all_ip_address["host7"]):
-                if(nexthop != all_mac_address["host5"]):
-                    raise Exception("bad_next_hop")
+    print("\t Please down host5's battery (lower than 15%)")
+    input("Press Enter to continue...")
+    print("Check change route ...")
+    start_time = time.time()
+    while not check_have_all_route():
+        time.sleep(5)
+        if (time.time() - start_time) > 30:
+            print("Failed")
+            exit(1)
 
-        except Exception as inst:
-            print(type(inst))
-            if(type(inst) == "bad_next_hop"):
-                print("\n\t destination : "+ destination
-                      + " have bad next hop " + nexthop)
+    start_time = time.time()
+    while not match_ip_mac("host7","host4"):
+        time.sleep(5)
+        if (time.time() - start_time) > 30:
+            print("Failed")
+            exit(1)
 
-        i = i+1
-
-    print("Active default route:", rtr_table[1].split()[0])
-
-    print("Active default next hop:", rtr_table[1][3])
+    print("Everything it's ok")
+    stopB()

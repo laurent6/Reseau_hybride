@@ -351,6 +351,7 @@ check_xroutes(int send_updates)
         return -1;
 
     rc = kernel_addresses(0, 0, routes, maxroutes);
+    debugf("num routes = %d",rc);
     if(rc < 0) {
         perror("kernel_addresses");
         numroutes = 0;
@@ -378,7 +379,8 @@ check_xroutes(int send_updates)
                                                routes[i].proto,
                                                &filter_result);
         /*** CHANGE real metric export ***/
-        update_metric_battery_criteria(&routes[i].metric); 
+        if(routes[i].metric >0 && routes[i].metric != 256)
+          update_metric_battery_criteria(&routes[i].metric);
         if(filter_result.src_prefix != NULL) {
             memcpy(routes[i].src_prefix, filter_result.src_prefix, 16);
             routes[i].src_plen = filter_result.src_plen;
