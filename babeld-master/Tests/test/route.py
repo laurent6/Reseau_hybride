@@ -35,8 +35,6 @@ def get_routes():
 
 def check_have_all_route():
     routes = get_routes()
-    print(routes)
-    input("wait")
     number_of_route = len(all_ip_address)
     cop_list_adress = all_ip_address.copy()
     for key, value in routes.items():
