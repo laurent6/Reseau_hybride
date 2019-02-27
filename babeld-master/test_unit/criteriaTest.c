@@ -64,24 +64,24 @@ void testBattery(){
   FILE *f;
   f = fopen("battery","w");
   if(f != NULL){
-    char *c = "42"; 
+    char *c = "42";
     if(fputs(c,f) == EOF){
       perror(" \t Could not create battery file \n");
       exit(1);
     }
-    fclose(f); 
+    fclose(f);
   }
 
-  
+
 struct buffered *buf;
 buf = malloc(sizeof(struct buffered));
 buf->len =0;
-buf->buf = malloc(sizeof(char *)); 
-battery(buf);
+buf->buf = malloc(sizeof(char *));
+push_criteria(buf);
 assert(buf->len == 3);
 assert(buf->buf[0]== MESSAGE_BATTERY);
 assert(buf->buf[1]== 1);
-assert(buf->buf[2] == 42); 
+assert(buf->buf[2] == 42);
 
 
 
@@ -90,8 +90,8 @@ assert(buf->buf[2] == 42);
 int
 main(int argc, char **argv)
 {
-testBattery(); 
-  return 0; 
+testBattery();
+  return 0;
 }
 
 
