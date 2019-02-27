@@ -19,7 +19,7 @@ def startB(interface):
     os.system(command)
     command = "ifup "+ interface
     os.system(command)
-    command = "./babeld " + interface + " "
+    command = "./babeld " + interface + " > /dev/null 2>&1  "
     process = subprocess.Popen(command, shell=True,  stderr=None, stdout=None)
     print(" Done !")
     #os.system("./babeld ens3 >  /dev/null 2>&1")
@@ -43,10 +43,11 @@ def test_downBattery():
     start_time = time.time()
     while not route.check_have_all_route():
         time.sleep(5)
+        print(route.check_have_all_route())
         if(time.time() - start_time)> 45:
             print("Failed")
             exit(1)
-
+    print("a tout ")
     start_time = time.time()
     while not route.match_ip_mac("host7", "host5"):
         time.sleep(5)
