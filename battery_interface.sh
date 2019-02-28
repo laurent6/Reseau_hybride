@@ -15,8 +15,7 @@ else
 		echo ""$1": No such device"
 		exit
 	else
-		echo "Restarting networking service ..."
-		service networking restart
+		ifup "$1"
 	fi
 fi
 
@@ -43,11 +42,11 @@ while true; do
 		echo -ne "\rBattery: "$battery"%"
 	done
 
+	ifdown "$1"
 	echo -e "\n"$1" interface downed"
-	ifconfig $1 down
 	sleep "$time"
 	echo "Restarting "$1" interface ..."
-	service networking restart
+	ifup "$1"
 
 	while [ "$battery" -lt 100 ]; do
 		sleep "$time"
