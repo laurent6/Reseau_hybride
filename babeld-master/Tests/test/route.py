@@ -1,6 +1,8 @@
+import os
 from os import popen
 from re import match
 
+nb_host = 7
 
 all_ip_address = dict([("host1","2001:db8:3c4d:1::1/128"),
                    ("host2","2001:db8:3c4d:2::1/128"),
@@ -21,7 +23,6 @@ all_mac_address = dict([("host1","fe80::a000:ff:fe00:1"),
     ])
 
 
-
 def get_routes():
     rtr_table = [elem for elem in popen("route -6")]
     del rtr_table[0]
@@ -35,7 +36,7 @@ def get_routes():
 
 def check_have_all_route():
     routes = get_routes()
-    number_of_route = len(all_ip_address)
+    number_of_route = nb_host
     cop_list_adress = all_ip_address.copy()
     for key, value in routes.items():
         if key in cop_list_adress.values():
@@ -61,4 +62,14 @@ def match_ip_mac(hostname_ip, hostname_mac):
 def print_all_routes():
     rtr_table = get_routes()
     for destination, nexthop in rtr_table.items():
-        print(" destination : " + destination + " nexthop : " + nexthop)
+        print("Destination : " + destination + "\tNexthop : " + nexthop)
+
+def ping_all_hosts():
+        for i in range(1,nb_host):
+            host = "2001:db8:3c4d:" + str(i) + "::1"
+            cmd = "ping -6 -w 1 -c 1 " + host + " > /dev/null"
+            res = os.system(cmd)
+            if res == 0:
+                    print(host + " : host" + str(i) + " reachable")
+            else:
+                print(host + " : host" + str(i) + " unreachable")
