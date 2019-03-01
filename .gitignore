@@ -1,2 +1,8 @@
-babeld-master/Tests/test/__pycache__/babel.cpython-35.pyc
+#file extension
 *~
+*.pyc
+*.o
+
+#file or directory
+babeld
+battery

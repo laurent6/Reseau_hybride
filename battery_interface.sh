@@ -1,16 +1,30 @@
 #!/bin/bash
 
-echo "Usage : ./battery.sh [% of battery]"
+echo "Usage : ./battery.sh <interface> [% of battery]"
 
 # time interval for battery update
 time=5
 
-# check % of battery
+# check interface
 if [ -z "$1" ]; then
+	echo "Please, specify an interface"
+	exit
+else
+	ifconfig $1 > /dev/null
+	if [ "$?" -eq 1 ]; then
+		echo ""$1": No such device"
+		exit
+	else
+		ifup "$1"
+	fi
+fi
+
+# check % of battery
+if [ -z "$2" ]; then
 		battery=$(($RANDOM%100))
 else
-	if [[ "$1" =~ [0-9]+$ ]] && [ "$1" -ge 0 ] && [ "$1" -le 100 ]; then
-		battery=$1
+	if [[ "$2" =~ [0-9]+$ ]] && [ "$2" -ge 0 ] && [ "$2" -le 100 ]; then
+		battery=$2
 	else
 		echo "Not a integer between 0 and 100"
 		exit
@@ -27,6 +41,12 @@ while true; do
 		echo $battery > battery
 		echo -ne "\rBattery: "$battery"%"
 	done
+
+	ifdown "$1"
+	echo -e "\n"$1" interface downed"
+	sleep "$time"
+	echo "Restarting "$1" interface ..."
+	ifup "$1"
 
 	while [ "$battery" -lt 100 ]; do
 		sleep "$time"
