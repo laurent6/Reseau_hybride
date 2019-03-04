@@ -7,14 +7,13 @@ import sys
 import time
 import string
 import route
-process =0
-
+process=0
 
 def startB(interface):
     print("Start Babeld protocol", end='')
     os.chdir("../../")
     subprocess.run("rm -f /var/run/babeld.pid > /dev/null 2>&1", stderr=None, shell=True)
-
+    os.system("killall -9  babeld")
     command = "ifdown  "+ interface
     os.system(command)
     command = "ifup  "+ interface
@@ -25,9 +24,14 @@ def startB(interface):
     # os.system("./babeld ens3 >  /dev/null 2>&1")
 
 
-def stopB():
+def stopB(interface):
     print("Stop babeld protocol ... ", end='')
     os.system("rm -f /var/run/babeld.pid > /dev/null 2>&1")
+    os.system("killall -9 babeld")
+    command = "ifdown  " + interface
+    os.system(command)
+    command = "ifup  " + interface
+    os.system(command)
     if process != 0:
         process.terminate()
     print("Done ! ")
@@ -38,37 +42,42 @@ def test_downBattery():
     print(" \t Make sure that host5's battery is over than 15% and all host are up")
     input("Press Enter to continue... ")
     startB("ens3")
-    print("Checking all routes ... ")
+    print("Checking all routes ... ", end='')
     start_time = time.time()
     while not route.check_have_all_route():
         time.sleep(5)
-        if(time.time() - start_time )> 30:
+        if(time.time() - start_time )> 45:
+            stopB("ens3")
             print("Failed")
             exit(1)
-
+    print("Done")
+    print("checking match host7 host5 ...", end='')
     start_time = time.time()
     while not route.match_ip_mac("host7", "host5"):
         time.sleep(5)
-        if (time.time() - start_time) > 30:
+        if (time.time() - start_time) > 45:
+            stopB("ens3")
             print("Failed")
             exit(1)
-
+    print('Done !')
     print("\t Please down host5's battery (lower than 15%)")
     input("Press Enter to continue...")
-    print("Check changed routes ...")
+    print("Checking change route ...")
     start_time = time.time()
     while not route.check_have_all_route():
         time.sleep(5)
-        if (time.time() - start_time) > 30:
+        if (time.time() - start_time) > 45:
+            stopB("ens3")
             print("Failed")
             exit(1)
 
     start_time = time.time()
     while not route.match_ip_mac("host7" ,"host4"):
         time.sleep(5)
-        if (time.time() - start_time) > 30:
+        if (time.time() - start_time) > 45:
+            stopB("ens3")
             print("Failed")
             exit(1)
 
     print("Everything is ok")
-    stopB()
+    stopB("ens3")

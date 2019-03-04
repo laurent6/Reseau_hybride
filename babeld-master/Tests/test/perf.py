@@ -2,28 +2,43 @@ import route
 import babel
 import time
 import os
-
+import string
 
 def startPerf(nb_time, interface):
     print("\033[1m"+"PERFORMANCE TEST".center(80) + "\033[0m")
-    print("Down all interface ")
+    file = open("perf", "w")
+    babel.startB("ens3")
+    '''print("\t Make sure that babeld is up in all host and start mobilizer ")
     input("Press Enter to continue ... ")
-    file = open("perf","w")
-    file.write("#i \t time")
-    babel.startB(interface)
-    print("Up all interface ")
-    input("Press Enter to continue ... ")
-    for i in range(1,nb_time+1):
-        start_time = time.time()
-        while not route.check_have_all_route():
-            continue
+    time_mobilizer = time.time()
+    time.sleep(60)
+    for i in range(1,nb_time):
 
+        print("\t Start  test number "+str(i))
+        start_time = time.time()
+        is_on_time= True
+        while not route.check_have_all_route():
+            if((time.time()-start_time) >45):
+                is_on_time = False
+                break
+
+            continue
         end_time = time.time()
-        file.write(str(i)+"\t" + str(end_time-start_time))
-        time.sleep(3)
-        babel.startB(interface)
-        print("restart All interface ... ")
-        input("Press Enter to continue ... ")
+        if is_on_time:
+            print(" \t Save time stabiliszation of all routes")
+            file.write("\n" +str(i)+"\t" + str(end_time-start_time))
+        else :
+            print("\t Problem with synchronisation continue ")
+        time.sleep(60-round((end_time-start_time)))'''
+    input(" wait for you ..")
+    routes = route.get_routes()
+    print(routes)
+    babel.stopB("ens3")
+    input("wait other")
+    routes = route.get_routes()
+    print("\n \n \n" + routes)
+
+
 
     file.close()
-
+    babel.stopB("ens3")
