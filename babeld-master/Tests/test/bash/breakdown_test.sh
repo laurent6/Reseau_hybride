@@ -3,7 +3,7 @@
 echo "Usage : ./route.sh <host down>"
 
 #variables
-hosts="1 2 3 4 5 6"
+hosts="1 2 3 4 5 6 7"
 declare -a route
 declare -a nroute
 

@@ -25,11 +25,11 @@ nb_host = 7
 
 
 def get_routes():
-    rtr_table = [elem for elem in popen("route -6 ")]
+    rtr_table = [elem for elem in popen("route -6 -n")]
     res = {}
     for i in range(1, len(rtr_table)):
         route = rtr_table[i].split()
-        if(route[3] != -1): # metric != +infini
+        if(route[3] != "-1"): # metric != +infini
             res[route[0].split("/")[0]] = route[1]  # res[ip_destination] = nextHop
 
     return res
@@ -47,7 +47,6 @@ def is_up_link():
 
 def check_have_all_route():
     routes = get_routes()
-
     cop_list_adress = all_ip_address.copy()
     for key,value in routes.items():
         if key in cop_list_adress.values():
@@ -83,3 +82,9 @@ def ping_all_hosts():
             else:
                 print(host + " : host" + str(i) + " unreachable")
 
+
+def is_reachable_link(host):
+        cmd = "ping6 -c 1 -I ens3 " + all_mac_address[host]+"  > /dev/null"
+
+        res = os.system(cmd)
+        return res ==0
