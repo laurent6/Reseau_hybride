@@ -32,14 +32,14 @@ else
 fi
 
 echo $battery > battery
-echo -n "Battery: "$battery"%"
+echo -n "Battery: "$battery"%   "
 
 while true; do
 	while [ "$battery" -gt 0 ]; do
 		sleep "$time"
 		battery=$(($battery-1))
 		echo $battery > battery
-		echo -ne "\rBattery: "$battery"%"
+		echo -ne "\rBattery: "$battery"%   "
 	done
 
 	ifdown "$1"
@@ -52,6 +52,6 @@ while true; do
 		sleep "$time"
 		battery=$(($battery+1))
 		echo $battery > battery
-		echo -ne "\rBattery: "$battery"%"
+		echo -ne "\rBattery: "$battery"%   "
 	done
 done
