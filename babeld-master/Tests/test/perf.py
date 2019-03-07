@@ -7,8 +7,9 @@ import string
 def startPerf(nb_time, interface):
     print("\033[1m"+"PERFORMANCE TEST".center(80) + "\033[0m")
     file = open("perf", "w")
-    babel.startB("ens3")
-    print("\t Make sure that babeld is up in all host and start mobilizer ")
+    print("\t Please,  "
+          "\n\t\t 1)  start {PATH_To_Babel}/daemon_connect_neighboor.sh in all Host"
+          "\n\t\t 2) Start mobilizer in Nemu prompt  ( 1) can be do before 2) )")
     input("Press Enter to continue ... ")
     time_mobilizer = time.time()
 
