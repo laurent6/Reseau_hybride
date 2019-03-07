@@ -39,6 +39,7 @@ THE SOFTWARE.
 #include "util.h"
 #include "configuration.h"
 #include "local.h"
+#include "criteria.h"
 
 static struct xroute *xroutes;
 static int numxroutes = 0, maxxroutes = 0;
