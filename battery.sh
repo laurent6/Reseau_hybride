@@ -24,14 +24,14 @@ while true; do
 	while [ "$battery" -gt 0 ]; do
 		sleep "$time"
 		battery=$(($battery-1))
-		echo $battery > battery
-		echo -ne "\rBattery: "$battery"%"
+		echo $battery > babeld-master/battery
+		echo -ne "\rBattery: "$battery""
 	done
 
 	while [ "$battery" -lt 100 ]; do
 		sleep "$time"
 		battery=$(($battery+1))
-		echo $battery > battery
+		echo $battery > babeld-master/battery
 		echo -ne "\rBattery: "$battery"%"
 	done
 done
