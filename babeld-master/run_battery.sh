@@ -5,6 +5,13 @@ echo "Usage : ./battery.sh <interface> [% of battery]"
 # time interval for battery update
 time=5
 
+# check if babeld exist
+babeld_command="$(dirname $(realpath $0))/babeld"
+if [ ! -f "$babeld_command" ]; then
+	echo ""$babeld_command" : doesn't exist"
+	exit
+fi
+
 # check interface
 if [ -z "$1" ]; then
 	echo "Please, specify an interface"
@@ -32,26 +39,34 @@ else
 fi
 
 echo $battery > battery
-echo -n "Battery: "$battery"%"
+echo -n "Battery: "$battery"%   "
 
 while true; do
 	while [ "$battery" -gt 0 ]; do
 		sleep "$time"
 		battery=$(($battery-1))
 		echo $battery > battery
-		echo -ne "\rBattery: "$battery"%"
+		echo -ne "\rBattery: "$battery"%   "
 	done
 
+	# battery at 0%
 	ifdown "$1"
-	echo -e "\n"$1" interface downed"
+	echo -e "\n\n"$1" interface downed"
+	pkill babeld
+	echo "babeld process killed"
+	
+	echo "----------"
 	sleep "$time"
+	
 	echo "Restarting "$1" interface ..."
 	ifup "$1"
+	echo -e "Restarting babeld process ..."
+	$babeld_command ens3
 
 	while [ "$battery" -lt 100 ]; do
 		sleep "$time"
 		battery=$(($battery+1))
 		echo $battery > battery
-		echo -ne "\rBattery: "$battery"%"
+		echo -ne "\rBattery: "$battery"%   "
 	done
 done
