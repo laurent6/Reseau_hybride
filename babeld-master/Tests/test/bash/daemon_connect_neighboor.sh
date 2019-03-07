@@ -57,7 +57,7 @@ while true ; do
         fi
         iter=$(($iter+1))
       done
-      if [ $iter -ge 3 ]
+      if [ $nbNoError -ge 3 ]
       then
         res=0
       else
