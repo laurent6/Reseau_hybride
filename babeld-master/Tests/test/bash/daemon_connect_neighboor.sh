@@ -46,8 +46,23 @@ restartbabel
 while true ; do
   for i in "${neighInit[@]}"
     do
-      ping -6 -I ens3 $i -c 5 -w 6  >/dev/null 
-      res=$?
+      iter=0
+      nbNoError=0
+      while [ "$iter" != 5 ]
+      do
+        ping -6 -I ens3 $i -c 1 -w 6  >/dev/null
+        if [ "$?" = 0 ]
+        then
+          nbNoError=$(($nbNoError+1))
+        fi
+        iter=$(($iter+1))
+      done
+      if [ $iter -ge 3 ]
+      then
+        res=0
+      else
+        res=1
+      fi
       if [ "$res" = 0 ]  && [ "$isDownLink" = 0 ]; then
         isDownLink=1
       fi
