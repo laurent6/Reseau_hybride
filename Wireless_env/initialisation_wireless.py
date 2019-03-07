@@ -1,6 +1,6 @@
 # path to debian image 
 path_sys="/net/cremi/lbouquin/espaces/travail/debian9.img"
-session_name='wireless_network2'
+session_name='../Wireless_Test/wireless_network2'
 
 InitNemu(session=session_name, workspace='.', hdcopy=False)
 
