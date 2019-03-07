@@ -1,75 +1,83 @@
 
-
 import subprocess
 import os
-import route
+from os import popen
+from re import match
 import sys
 import time
 import string
+import route
 process=0
-
 
 def startB(interface):
     print("Start Babeld protocol", end='')
     os.chdir("../../")
-    subprocess.run("rm -f /var/run/babeld.pid", stderr=None, shell=True)
-    command = "killall babeld"
+    subprocess.run("rm -f /var/run/babeld.pid > /dev/null 2>&1", stderr=None, shell=True)
+    os.system("killall -9  babeld")
+    command = "ifdown  "+ interface
     os.system(command)
-    command = "ifdown "+ interface
+    command = "ifup  "+ interface
     os.system(command)
-    command = "ifup "+ interface
-    os.system(command)
-    command = "./babeld " + interface + " "
+    command = "./babeld " + interface + "> /dev/null 2>&1"
     process = subprocess.Popen(command, shell=True,  stderr=None, stdout=None)
     print(" Done !")
-    #os.system("./babeld ens3 >  /dev/null 2>&1")
+    # os.system("./babeld ens3 >  /dev/null 2>&1")
 
 
-def stopB():
+def stopB(interface):
     print("Stop babeld protocol ... ", end='')
     os.system("rm -f /var/run/babeld.pid > /dev/null 2>&1")
-    os.system("killall babeld")
+    os.system("killall -9 babeld")
+    command = "ifdown  " + interface
+    os.system(command)
+    command = "ifup  " + interface
+    os.system(command)
     if process != 0:
         process.terminate()
     print("Done ! ")
 
 
 def test_downBattery():
-    print("\033[1m"+"TEST BATTERY CRITERIA".center(80) + "\033[0m")
-    print(" \t Make sure that host5's battery is upper than 15% and all host are up")
+    print("\033[1m " +"TEST BATTERY CRITERIA".center(80) + "\033[0m")
+    print(" \t Make sure that host5's battery is over than 15% and all host are up")
     input("Press Enter to continue... ")
     startB("ens3")
-    print("Check all routes ... ")
+    print("Checking all routes ... ", end='')
     start_time = time.time()
     while not route.check_have_all_route():
         time.sleep(5)
-        if(time.time() - start_time)> 45:
+        if(time.time() - start_time )> 45:
+            stopB("ens3")
             print("Failed")
             exit(1)
-
+    print("Done")
+    print("checking match host7 host5 ...", end='')
     start_time = time.time()
     while not route.match_ip_mac("host7", "host5"):
         time.sleep(5)
         if (time.time() - start_time) > 45:
+            stopB("ens3")
             print("Failed")
             exit(1)
-
+    print('Done !')
     print("\t Please down host5's battery (lower than 15%)")
     input("Press Enter to continue...")
-    print("Check change route ...")
+    print("Checking change route ...")
     start_time = time.time()
     while not route.check_have_all_route():
         time.sleep(5)
         if (time.time() - start_time) > 45:
+            stopB("ens3")
             print("Failed")
             exit(1)
 
     start_time = time.time()
-    while not route.match_ip_mac("host7","host4"):
+    while not route.match_ip_mac("host7" ,"host4"):
         time.sleep(5)
         if (time.time() - start_time) > 45:
+            stopB("ens3")
             print("Failed")
             exit(1)
 
-    print("Everything it's ok")
-    stopB()
+    print("Everything is ok")
+    stopB("ens3")

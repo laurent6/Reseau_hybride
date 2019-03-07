@@ -1,6 +1,6 @@
 #!/bin/bash
 
-hosts="1 2 3 4 5 6"
+hosts="1 2 3 4 5 6 7"
 failed=0
 
 for host in $hosts; do
