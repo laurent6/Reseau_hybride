@@ -29,21 +29,7 @@ stopBabel(){
 startBabel()
 {
   #start babel
-  ps -a | grep "babeld" >/dev/null 2>&1
-  if [ "$?" = 1 ]
-  then
     /root/reseau_hybride/babeld-master/babeld ens3 >/dev/null 2>&1 &
-    ps -a | grep "babeld" >/dev/null 2>&1
-    if [ "$?" = 1 ]
-    then
-      echo "Failed to start babel protocol"
-      exit 1
-    fi
-  else
-    echo "Error kill babel protocol"
-    exit 1
-  fi
-
 }
 #find all neighboor
 var=($(ping6 -I ens3 ff02::1 -c 5 ))
@@ -87,7 +73,7 @@ while true ; do
         fi
   done
   if [ "$res" = 1 ] && [ "$firstTime" = true ]; then
-      echo -ne "Connectivity Down Stop Babel protocol ... "
+      echo -ne "Connectivity Down Stop Babel protocol... "
       stopBabel
       firstTime=false
       echo  " Done"
