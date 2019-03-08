@@ -4,7 +4,7 @@ import TestRoute
 def main():
     #todo
     #babel.startB("ens3")
-    #babel.test_downBattery()
+    babel.test_downBattery()
     perf.startPerf(25,"ens3")
     #TestRoute.test_is_link()
 if __name__ == "__main__":
