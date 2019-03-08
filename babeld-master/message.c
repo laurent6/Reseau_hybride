@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include "configuration.h"
 /****** CHANGE ******/
 #include "criteria.h"
+
 unsigned char packet_header[4] = {42, 2};
 
 int split_horizon = 1;

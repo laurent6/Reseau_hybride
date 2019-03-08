@@ -61,14 +61,11 @@ void push_battery_buff(struct buffered *buf){
   buf->buf[buf->len++]= battery;
 }
 
-void update_metric_battery_criteria(int * metric ){
+void update_metric_battery_criteria(int * metric){
   int battery = getBattery();
   if(battery <= 15 && *metric < 1024){
       *metric += 1024;//(int)INFINITY/2;
   }
-
-
-
 }
 
 int is_battery_critical(int b){
@@ -82,7 +79,4 @@ int is_battery_critical(int b){
 void push_criteria(struct buffered *buf){
 
   push_battery_buff(buf);
-
-
-
 }
