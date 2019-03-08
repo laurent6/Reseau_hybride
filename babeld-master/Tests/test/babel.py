@@ -12,7 +12,8 @@ process=0
 def startB(interface):
     print("Start Babeld protocol", end='')
     os.chdir("../../")
-    stopB(interface)
+    if subprocess.call("ps -a |grep 'babeld' > /dev/null") == 1:
+            stopB(interface)
     command = "./babeld " + interface + "> /dev/null 2>&1"
     process = subprocess.Popen(command, shell=True,  stderr=None, stdout=None)
     print(" Done !")
