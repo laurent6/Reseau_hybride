@@ -1,7 +1,4 @@
-<<<<<<< HEAD:Wireless_Test/interfaces/host5.txt
 
-=======
->>>>>>> 4796e3f3af672a0244fb29df20ef34ade371011d:Wireless_env/interfaces/host5.txt
 auto ens3
 iface ens3 inet6 static 
 	address 2001:db8:3c4d:5::1
