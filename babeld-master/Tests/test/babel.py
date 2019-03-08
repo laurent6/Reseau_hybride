@@ -16,13 +16,13 @@ def startB(interface):
     command = "./babeld " + interface + "> /dev/null 2>&1"
     process = subprocess.Popen(command, shell=True,  stderr=None, stdout=None)
     print(" Done !")
-    
+
 
 
 def stopB(interface):
     print("Stop babeld protocol ... ", end='')
     os.system("rm -f /var/run/babeld.pid > /dev/null 2>&1")
-    os.system("killall -9 babeld")
+    os.system("killall -9 babeld > /dev/null 2>&1")
     time.sleep(10)
     print("Done ! ")
 
