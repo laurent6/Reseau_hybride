@@ -22,14 +22,12 @@ filterResult()
 
 
 }
-
-restartbabel()
-{
-  killall -9 babeld >/dev/null 2>&1
+stopBabel(){
+  killall babeld >/dev/null 2>&1
   rm /var/run/babeld.pid >/dev/null 2>&1
-  # clean routing table
-  ifdown ens3 >/dev/null 2>&1
-  ifup ens3 >/dev/null 2>&1
+}
+startBabel()
+{
   #start babel
   ps -a | grep "babeld" >/dev/null 2>&1
   if [ "$?" = 1 ]
@@ -65,7 +63,7 @@ then
 fi
 # restart babel to avoid error
 echo -ne "First restart Babel ... "
-restartbabel
+stopBabel
 echo " Done"
 
 # In 5s We look at if we can contact all neighboor.
@@ -79,12 +77,18 @@ while true ; do
         if [ "$?" = 0 ]
         then
           res=0
-          firstTime=true
+          if [ "$firstTime" = false ]
+          then
+            echo -ne "Connectivity up Start Babel  protocol... "
+            startBabel
+            echo  " Done"
+            firstTime=true
+          fi
         fi
   done
   if [ "$res" = 1 ] && [ "$firstTime" = true ]; then
-      echo -ne "Connectivity Down Restart Babel and clear routing table ... "
-      restartbabel
+      echo -ne "Connectivity Down Stop Babel protocol ... "
+      stopBabel
       firstTime=false
       echo  " Done"
   fi

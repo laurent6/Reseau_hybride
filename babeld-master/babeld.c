@@ -144,7 +144,7 @@ kernel_rule_notify(struct kernel_rule *rule, void *closure)
 
 int
 main(int argc, char **argv)
-{ 
+{
     struct sockaddr_in6 sin6;
     int rc, fd, i, opt;
     time_t expiry_time, source_expiry_time, kernel_dump_time;
@@ -567,7 +567,7 @@ main(int argc, char **argv)
     FOR_ALL_INTERFACES(ifp) {
         if(!if_up(ifp))
             continue;
-        /* Apply jitter before we send the first message. */
+        /* Apply jitter before we send the first message.*/
         usleep(roughly(10000));
         gettime(&now);
         send_hello(ifp);
@@ -588,8 +588,6 @@ main(int argc, char **argv)
         flushupdates(ifp);
         flushbuf(&ifp->buf);
     }
-
-    debugf("Entering main loop.\n");
 
     while(1) {
         struct timeval tv;
