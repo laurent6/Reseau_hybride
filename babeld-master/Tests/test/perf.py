@@ -38,4 +38,3 @@ def startPerf(nb_time, interface):
 
 
     file.close()
-    babel.stopB("ens3")

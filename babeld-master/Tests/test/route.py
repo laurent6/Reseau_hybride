@@ -84,7 +84,7 @@ def ping_all_hosts():
 
 
 def is_reachable_link(host):
-        cmd = "ping6 -c 1 -I ens3 " + all_mac_address[host]+"  > /dev/null"
+        cmd = "ping6  -I ens3 " + all_mac_address[host]+" -c 1 -w 1  > /dev/null"
 
         res = os.system(cmd)
-        return res ==0
+        return res == 0
