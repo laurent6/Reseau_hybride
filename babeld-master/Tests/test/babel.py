@@ -12,28 +12,18 @@ process=0
 def startB(interface):
     print("Start Babeld protocol", end='')
     os.chdir("../../")
-    subprocess.run("rm -f /var/run/babeld.pid > /dev/null 2>&1", stderr=None, shell=True)
-    os.system("killall -9  babeld")
-    command = "ifdown  "+ interface
-    os.system(command)
-    command = "ifup  "+ interface
-    os.system(command)
+    stopB(interface)
     command = "./babeld " + interface + "> /dev/null 2>&1"
     process = subprocess.Popen(command, shell=True,  stderr=None, stdout=None)
     print(" Done !")
-    # os.system("./babeld ens3 >  /dev/null 2>&1")
+    
 
 
 def stopB(interface):
     print("Stop babeld protocol ... ", end='')
     os.system("rm -f /var/run/babeld.pid > /dev/null 2>&1")
     os.system("killall -9 babeld")
-    command = "ifdown  " + interface
-    os.system(command)
-    command = "ifup  " + interface
-    os.system(command)
-    if process != 0:
-        process.terminate()
+    time.sleep(10)
     print("Done ! ")
 
 

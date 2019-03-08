@@ -12,11 +12,11 @@ def startPerf(nb_time, interface):
           "\n\t\t 2) Start mobilizer in Nemu prompt  ( 1) can be do before 2) )")
     input("Press Enter to continue ... ")
     time_mobilizer = time.time()
-    if subprocess.call("ps -a |grep 'babeld' >/dev/null", shell=True) == 1:
+    '''if subprocess.call("ps -a |grep 'babeld' >/dev/null", shell=True) == 1:
         print("\033[91m  \033[1m Babel is not Starting ")
-        exit(1)
+        exit(1)'''
     for i in range(1,nb_time):
-        while not route.is_reachable_link("host2"):
+        while not route.is_reachable_link("host5"):
             continue
         print("All link reachable ")
         start_time = time.time()
@@ -33,7 +33,7 @@ def startPerf(nb_time, interface):
         else :
             print("\t Problem with synchronisation continue ")
         if(i <= nb_time):
-            while route.is_reachable_link("host2"):
+            while route.is_reachable_link("host5"):
                 continue
             print("All link are unreachable")
 
