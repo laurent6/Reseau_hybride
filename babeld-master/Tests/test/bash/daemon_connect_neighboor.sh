@@ -25,13 +25,27 @@ filterResult()
 
 restartbabel()
 {
-  killall babeld >/dev/null 2>&1
+  killall -9 babeld >/dev/null 2>&1
   rm /var/run/babeld.pid >/dev/null 2>&1
   # clean routing table
   ifdown ens3 >/dev/null 2>&1
   ifup ens3 >/dev/null 2>&1
   #start babel
-  /root/reseau_hybride/babeld-master/babeld ens3 >/dev/null 2>&1 &
+  ps -a | grep "babeld" >/dev/null 2>&1
+  if [ "$?" = 1 ]
+  then
+    /root/reseau_hybride/babeld-master/babeld ens3 >/dev/null 2>&1 &
+    ps -a | grep "babeld" >/dev/null 2>&1
+    if [ "$?" = 1 ]
+    then
+      echo "Failed to start babel protocol"
+      exit 1
+    fi
+  else
+    echo "Error kill babel protocol"
+    exit 1
+  fi
+
 }
 #find all neighboor
 var=($(ping6 -I ens3 ff02::1 -c 5 ))
@@ -44,6 +58,11 @@ filterResult var
 echo " Done"
 declare -a neighInit
 neighInit=("${tabFiltered[@]}")
+if [ ${#tabFiltered[@]} = 0 ]
+then
+  echo "No connectivity found"
+  exit 1
+fi
 # restart babel to avoid error
 echo -ne "First restart Babel ... "
 restartbabel

@@ -1,7 +1,7 @@
-import os
 from os import popen
 from re import match
 import os
+import subprocess
 
 all_ip_address = dict([("host1" ,"2001:db8:3c4d:1::1"),
                        ("host2" ,"2001:db8:3c4d:2::1"),
@@ -25,7 +25,7 @@ nb_host = 7
 
 
 def get_routes():
-    rtr_table = [elem for elem in popen("route -6 -n")]
+    rtr_table = [elem for elem in popen("route -6 -n ")]
     res = {}
     for i in range(1, len(rtr_table)):
         route = rtr_table[i].split()
@@ -41,9 +41,6 @@ def reset_routes(interface):
     command = "ifup  " + interface
     os.system(command)
     print("Done")
-
-def is_up_link(): 
-    return len(os.popen("ping a2:00:00:00:00:02").readlines()) != 0
 
 def check_have_all_route():
     routes = get_routes()
@@ -84,7 +81,9 @@ def ping_all_hosts():
 
 
 def is_reachable_link(host):
-        cmd = "ping6  -I ens3 " + all_mac_address[host]+" -c 1 -w 1  > /dev/null"
-
-        res = os.system(cmd)
-        return res == 0
+        cmd = "ifconfig |grep 'ens3' >/dev/null"
+        if not subprocess.call(cmd, shell=True):
+            cmd = "ping6  -I ens3 " + all_mac_address[host]+" -c 1 -w 1  >/dev/null 2>&1"
+            res = subprocess.call(cmd, shell=True)
+            return res == 0
+        return False
