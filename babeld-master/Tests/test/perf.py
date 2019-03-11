@@ -15,7 +15,8 @@ def startPerf(nb_time, interface):
     '''if subprocess.call("ps -a |grep 'babeld' >/dev/null", shell=True) == 1:
         print("\033[91m  \033[1m Babel is not Starting ")
         exit(1)'''
-    for i in range(1,nb_time):
+    i=0
+    while i < nb_time:
         while not route.is_reachable_link("host5"):
             continue
         print("All link reachable ")
@@ -32,7 +33,8 @@ def startPerf(nb_time, interface):
             file.write("\n" +str(i)+"\t" + str(end_time-start_time))
         else :
             print("\t Problem with synchronisation continue ")
-        if(i <= nb_time):
+        i = i + 1
+        if(i < nb_time):
             while route.is_reachable_link("host5"):
                 continue
             print("All link are unreachable")
