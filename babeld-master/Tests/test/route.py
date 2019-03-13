@@ -23,6 +23,17 @@ all_mac_address = dict([("host1" ,"fe80::a000:ff:fe00:1"),
 
 nb_host = 7
 
+def list_of_host(list):
+    a={}
+    for elt in list:
+        if elt in all_ip_address.keys():
+            a[elt] = all_ip_address[elt]
+
+    all_ip_address.clear()
+    all_ip_address.update(a)
+
+def print_all_ip_address():
+    print(all_ip_address)
 
 def get_routes():
     rtr_table = [elem for elem in popen("route -6 -n ")]
@@ -81,9 +92,6 @@ def ping_all_hosts():
 
 
 def is_reachable_link(host):
-        cmd = "ifconfig |grep 'ens3' >/dev/null"
-        if not subprocess.call(cmd, shell=True):
-            cmd = "ping6  -I ens3 " + all_mac_address[host]+" -c 1 -w 1  >/dev/null 2>&1"
-            res = subprocess.call(cmd, shell=True)
-            return res == 0
-        return False
+        cmd = "ping6  -I ens3 " + all_mac_address[host]+" -c 1 -w 1  >/dev/null 2>&1"
+        res = os.system(cmd)
+        return res == 0
