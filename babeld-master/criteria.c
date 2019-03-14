@@ -26,7 +26,7 @@ Julien Massonneau
 #include "local.h"
 #include "disambiguation.h"
 #include "criteria.h"
-
+#include <arpa/inet.h>
 
 /*
 Get battery status.
@@ -78,4 +78,11 @@ int is_battery_critical(int b){
 void push_criteria(struct buffered *buf){
 
   push_battery_buff(buf);
+}
+
+int delay_neighbour(struct neighbour *neigh){
+  char * str[64];
+  inet_ntop(AF_INET6,(void *)&neigh->buf.sin6,str,INET6_ADDRSTRLEN);
+  fprintf(stdout, "Work ? ---------- %s -------------\n",str);
+  return 0 ;
 }
