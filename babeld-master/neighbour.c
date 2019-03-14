@@ -130,10 +130,13 @@ find_neighbour(const unsigned char *address, struct interface *ifp)
     neigh->buf.flush_interval = ifp->buf.flush_interval;
     neigh->buf.sin6.sin6_family = AF_INET6;
     //memcpy(&neigh->buf.sin6.sin6_addr, address, 16);
-    inet_pton(AF_INET6, format_address(address), (void *)&neigh->buf.sin6);
+    if((inet_pton(AF_INET6, format_address(address), &neigh->buf.sin6.sin6_addr)) !=1){
+      perror("should'nt this Happened ");
+      exit(1);
+    }
 
-    fprintf(stdout, "Creating neighbour %s on %s.\n",
-           format_address(address), ifp->name );
+    fprintf(stdout, "Creating neighbour %s on %s , ,\n",
+           format_address(address), ifp->name);
     fprintf(stdout," delais %d", neigh->delay);
     neigh->buf.sin6.sin6_port = htons(protocol_port);
     neigh->buf.sin6.sin6_scope_id = ifp->ifindex;

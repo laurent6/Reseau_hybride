@@ -81,7 +81,8 @@ void push_criteria(struct buffered *buf){
 }
 
 int delay_neighbour(struct neighbour *neigh){
-  char * address[64];
-  inet_ntop(AF_INET6,(void *)&neigh->buf.sin6,(char *)address,INET6_ADDRSTRLEN);
-  return get_delay((char*)address);
+  char address[INET6_ADDRSTRLEN];
+  inet_ntop(AF_INET6,(void *)&neigh->buf.sin6.sin6_addr,&address,INET6_ADDRSTRLEN);
+  fprintf(stdout," adress : %s",address);
+  return get_delay(&address);
 }

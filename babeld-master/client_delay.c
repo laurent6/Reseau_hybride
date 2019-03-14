@@ -16,7 +16,11 @@ bool ping(int s, char *message)
     char buf[8192];
 
     gettimeofday(&start, NULL);
-    send(s, message, strlen(message), 0);
+
+    if(send(s, message, strlen(message), 0) <0){
+      perror("Can't send message shoudn't happened");
+      exit(1);
+    };
     int v;
     struct timeval timeout;
     timeout.tv_sec = 1;
@@ -41,8 +45,15 @@ unsigned long get_delay(char *address){
   s = socket(AF_INET6, SOCK_STREAM, 0);
   addr.sin6_family = AF_INET6;
   addr.sin6_port = htons(5000);
-  inet_pton(AF_INET6, address, &addr.sin6_addr);
-  connect(s, (struct sockaddr *)&addr, sizeof(addr));
+  fprintf(stdout," address %s \n",address);
+  if(inet_pton(AF_INET6, address, &addr.sin6_addr) !=1){
+      perror(" Convert adress string to socket structure failed");
+      exit(1);
+  }
+  if(connect(s, (struct sockaddr *)&addr, sizeof(addr)) == -1){
+      perror(" Connect to neighbour to delay failed");
+      exit(1);
+  }
   char *string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   size_t stringLen = strlen(string);
   char char_to_send[10];
