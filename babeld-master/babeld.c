@@ -878,7 +878,7 @@ main(int argc, char **argv)
             "               "
             "[-u] [-t table] [-T table] [-c file] [-C statement]\n"
             "               "
-            "[-d level] [-D] [-L logfile] [-I pidfile]\n"
+            "[-d level] [-D] [-L logfile] [-I pidfile] [-b]\n"
             "               "
             "interface...\n",
             BABELD_VERSION);
