@@ -81,9 +81,7 @@ def ping_all_hosts():
 
 
 def is_reachable_link(host):
-        cmd = "ifconfig |grep 'ens3' >/dev/null"
-        if not subprocess.call(cmd, shell=True):
-            cmd = "ping6  -I ens3 " + all_mac_address[host]+" -c 1 -w 1  >/dev/null 2>&1"
-            res = subprocess.call(cmd, shell=True)
-            return res == 0
-        return False
+
+        cmd = "ping6  -I ens3 " + all_mac_address[host]+" -c 1 -w 1  >/dev/null 2>&1"
+        res = os.system(cmd)
+        return res == 0
