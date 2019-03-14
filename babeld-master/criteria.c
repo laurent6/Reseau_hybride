@@ -1,6 +1,5 @@
 /***
 
-
 @author Laurent BOUQUIN
 Virgile Chatelain
 Julien Massonneau
@@ -35,7 +34,7 @@ Get battery status.
 */
 int getBattery(){
   FILE *f;
-  int res = -1;
+  int res = 100;
   f = fopen("battery","r");
   if(f != NULL){
     char tmp[255];
