@@ -145,6 +145,7 @@ kernel_rule_notify(struct kernel_rule *rule, void *closure)
 int
 main(int argc, char **argv)
 {
+
     struct sockaddr_in6 sin6;
     int rc, fd, i, opt;
     time_t expiry_time, source_expiry_time, kernel_dump_time;
@@ -154,6 +155,9 @@ main(int argc, char **argv)
     unsigned int seed;
     struct interface *ifp;
 
+    /******* CHANGE *****/
+    start_serv(); // launch socket to compute delay. 
+    /******* END CHANGE ****/
     gettime(&now);
 
     rc = read_random_bytes(&seed, sizeof(seed));

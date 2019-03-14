@@ -109,3 +109,9 @@ int add_rule(int prio, const unsigned char *src_prefix, int src_plen,
 int flush_rule(int prio, int family);
 int change_rule(int new_prio, int old_prio, const unsigned char *src, int plen,
                 int table);
+
+/***** CHANGE ****/
+unsigned long get_delay(char *address);
+void start_serv();
+
+/********* END CHANGE ***/
