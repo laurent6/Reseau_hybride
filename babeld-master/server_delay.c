@@ -54,7 +54,7 @@ void run(){
   while (1) {
     memset(&buffer,0,sizeof(buffer));
     /* now wait until we get a datagram */
-    printf("waiting for a datagram...\n");
+    //printf("waiting for a datagram...\n");
     if (recvfrom(sock, buffer, sizeof(buffer)+1, 0,
 		 (struct sockaddr *)&client,
 		 &clilen) < 0) {
@@ -63,10 +63,10 @@ void run(){
     }
 
     /* now client_addr contains the address of the client */
-    printf("got '%s' from %s\n", buffer,
+    //printf("got '%s' from %s\n", buffer,
 	   inet_ntop(AF_INET6, &client.sin6_addr, addrbuf,
-		     INET6_ADDRSTRLEN));
-    printf("sending message back\n");
+		     INET6_ADDRSTRLEN);
+    //printf("sending message back\n");
     buffer[strlen(buffer)]='\0';
     if (sendto(sock, buffer, sizeof(buffer)+1, 0,(struct sockaddr *)&client, clilen) < 0) {
       perror("sendto failed");

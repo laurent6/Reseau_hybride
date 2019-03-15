@@ -41,9 +41,9 @@ double ping(int sock, char *message,struct sockaddr_in6 serv){
     t = clock() -t;
   }
   char addrbuf[INET6_ADDRSTRLEN];
-  printf("got '%s' from %s with send '%s'\n", buffer_reception,
+  /*printf("got '%s' from %s with send '%s'\n", buffer_reception,
    inet_ntop(AF_INET6, &cli.sin6_addr, addrbuf,
-       INET6_ADDRSTRLEN),message);
+       INET6_ADDRSTRLEN),message);*/
 
 
   if(strcmp(buffer_reception, message) !=0){
