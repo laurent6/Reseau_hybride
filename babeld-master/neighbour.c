@@ -39,6 +39,7 @@ THE SOFTWARE.
 #include "resend.h"
 #include "local.h"
 #include "criteria.h"
+#include "kernel.h"
 struct neighbour *neighs = NULL;
 /*******CHANGE **************/
 /*
@@ -135,14 +136,13 @@ find_neighbour(const unsigned char *address, struct interface *ifp)
       exit(1);
     }
 
-    fprintf(stdout, "Creating neighbour %s on %s , ,\n",
-           format_address(address), ifp->name);
-    fprintf(stdout," delais %d", neigh->delay);
     neigh->buf.sin6.sin6_port = htons(protocol_port);
     neigh->buf.sin6.sin6_scope_id = ifp->ifindex;
     neigh->next = neighs;
-    neigh->delay = delay_neighbour(neigh);
-    fprintf(stdout,"delay = %f", neigh->delay);
+    neigh->delay = 0;
+    update_delay_neighbour_criteria(neigh);
+    gettime(&neigh->last_delay_time);
+    debugf("Delay  of %s = %u \n", format_address(address),neigh->delay);
     neighs = neigh;
     local_notify_neighbour(neigh, LOCAL_ADD);
     return neigh;

@@ -47,7 +47,8 @@ struct neighbour {
     struct buffered buf;
     /******** CHANGE **********/
     unsigned  add_metric_critical;
-    double delay;
+    unsigned delay;
+    struct timeval last_delay_time;
     /*** END CHANGE ************/
 };
 
