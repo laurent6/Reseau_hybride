@@ -29,9 +29,12 @@
 int main(void)
 {
   int sock;
-  socklen_t clilen;
-  struct sockaddr_in6 server_addr, client_addr;
-  char buffer[1024];
+
+  struct sockaddr_in6 server, client;
+  socklen_t clilen = sizeof(client);
+  socklen_t servlen = sizeof(server);
+  char buffer[13];
+
   char addrbuf[INET6_ADDRSTRLEN];
 
   /* create a DGRAM (UDP) socket in the INET6 (IPv6) protocol */
@@ -53,36 +56,23 @@ int main(void)
   }
 #endif
 
-  /* create server address: this will say where we will be willing to
-     accept datagrams from */
-
-  /* clear it out */
-  memset(&server_addr, 0, sizeof(server_addr));
-
-  /* it is an INET6 address */
-  server_addr.sin6_family = AF_INET6;
-
-  /* the client IP address, in network byte order */
-  /* in this example we accept datagrams from ANYwhere */
-  server_addr.sin6_addr = in6addr_any;
-
-  /* the port we are going to listen on, in network byte order */
-  server_addr.sin6_port = htons(PORT);
+  memset(&server, 0, sizeof(server));
+  server.sin6_family = AF_INET6;
+  server.sin6_addr = in6addr_any;
+  server.sin6_port = htons(PORT);
 
   /* associate the socket with the address and port */
-  if (bind(sock, (struct sockaddr *)&server_addr,
-	   sizeof(server_addr)) < 0) {
-    perror("bind failed");
+  if (bind(sock, (struct sockaddr *)&server,servlen) < 0) {
+    perror("Bind failed");
     exit(2);
   }
 
   while (1) {
-
+    memset(&buffer,0,sizeof(buffer));
     /* now wait until we get a datagram */
     printf("waiting for a datagram...\n");
-    clilen = sizeof(client_addr);
-    if (recvfrom(sock, buffer, 1024, 0,
-		 (struct sockaddr *)&client_addr,
+    if (recvfrom(sock, buffer, sizeof(buffer)+1, 0,
+		 (struct sockaddr *)&client,
 		 &clilen) < 0) {
       perror("recvfrom failed");
       exit(4);
@@ -90,14 +80,12 @@ int main(void)
 
     /* now client_addr contains the address of the client */
     printf("got '%s' from %s\n", buffer,
-	   inet_ntop(AF_INET6, &client_addr.sin6_addr, addrbuf,
+	   inet_ntop(AF_INET6, &client.sin6_addr, addrbuf,
 		     INET6_ADDRSTRLEN));
-
     printf("sending message back\n");
-
-    if (sendto(sock, MESSAGE, sizeof(MESSAGE), 0,
-               (struct sockaddr *)&client_addr,
-	       sizeof(client_addr)) < 0) {
+    buffer[strlen(buffer)]='\0';
+    char *send="hello";
+    if (sendto(sock, buffer, sizeof(buffer)+1, 0,(struct sockaddr *)&client, clilen) < 0) {
       perror("sendto failed");
       exit(5);
     }
