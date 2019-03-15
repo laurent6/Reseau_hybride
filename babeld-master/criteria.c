@@ -80,8 +80,10 @@ void push_criteria(struct buffered *buf){
   push_battery_buff(buf);
 }
 
-void update_metric_delay_criteria(int *metric){
-
+void update_metric_delay_criteria(short unsigned int *metric, struct neighbour *neigh){
+  if(neigh->delay > 0){
+    *metric += neigh->delay;
+  }
 }
 
 void update_delay_neighbour_criteria(struct neighbour *neigh){
