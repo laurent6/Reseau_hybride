@@ -1,19 +1,3 @@
-/*
-  Example IPv6 UDP server.
-  Copyright (C) 2010 Russell Bradford
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License (http://www.gnu.org/copyleft/gpl.html)
-  for more details.
-*/
-
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -22,12 +6,12 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <string.h>
-
+#include <pthread.h>
 #define PORT 12345
 #define MESSAGE "hello"
 
-int main(void)
-{
+
+void run(){
   int sock;
 
   struct sockaddr_in6 server, client;
@@ -84,13 +68,27 @@ int main(void)
 		     INET6_ADDRSTRLEN));
     printf("sending message back\n");
     buffer[strlen(buffer)]='\0';
-    char *send="hello";
     if (sendto(sock, buffer, sizeof(buffer)+1, 0,(struct sockaddr *)&client, clilen) < 0) {
       perror("sendto failed");
       exit(5);
     }
 
   }
+}
+void start_serv()
+{
+  pthread_t thread1;
+    if (pthread_create(&thread1, NULL, (void *)run, NULL)) {
+        perror("pthread_create");
+        exit(1);
+    }
 
+
+}
+int main(void)
+{
+
+  start_serv();
+  sleep(1000000);
   return 0;
 }
