@@ -1,62 +1,79 @@
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
 #include <arpa/inet.h>
-#include <unistd.h>
+#include <string.h>
 #include <pthread.h>
 #include "kernel.h"
-#include <sys/types.h>
-#include <sys/wait.h>
 
-void handle_client(int c)
-{
-    char buf[8192];
-    char *lastpos;
-    int size;
 
-    while (1) {
-        size = recv(c, buf, 8192, 0);
-        if (size == 0) {
-            break;
-        }
-        lastpos = strchr(buf, '\n');
-        send(c, buf, lastpos+1-buf, 0);
-    }
-}
+
 void run(){
-  int s, c;
-  int reuseaddr = 1;
-  struct sockaddr_in6 addr;
-  int pid;
+  int sock;
 
-  s = socket(AF_INET6, SOCK_STREAM, 0);
-  setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(reuseaddr));
+  struct sockaddr_in6 server, client;
+  socklen_t clilen = sizeof(client);
+  socklen_t servlen = sizeof(server);
+  char buffer[13];
 
-  addr.sin6_family = AF_INET6;
-  addr.sin6_port = htons(5000);
-  addr.sin6_addr = in6addr_any;
+  char addrbuf[INET6_ADDRSTRLEN];
 
-  bind(s, (struct sockaddr *)&addr, sizeof(addr));
-  listen(s, 5);
+  /* create a DGRAM (UDP) socket in the INET6 (IPv6) protocol */
+  sock = socket(PF_INET6, SOCK_DGRAM, 0);
+
+  if (sock < 0) {
+    perror("creating socket");
+    exit(1);
+  }
+
+#ifdef V6ONLY
+  // setting this means the socket only accepts connections from v6;
+  // unset, it accepts v6 and v4 (mapped address) connections
+  { int opt = 1;
+    if (setsockopt(sock, IPPROTO_IPV6, IPV6_V6ONLY, &opt, sizeof(opt)) < 0) {
+      perror("setting option IPV6_V6ONLY");
+      exit(1);
+    }
+  }
+#endif
+
+  memset(&server, 0, sizeof(server));
+  server.sin6_family = AF_INET6;
+  server.sin6_addr = in6addr_any;
+  server.sin6_port = htons(PORT_DELAY);
+
+  /* associate the socket with the address and port */
+  if (bind(sock, (struct sockaddr *)&server,servlen) < 0) {
+    perror("Bind failed");
+    exit(2);
+  }
 
   while (1) {
-      c = accept(s, NULL, NULL);
-      pid = fork();
-      if (pid == -1) {
-          exit(1);
-      } else if (pid == 0) {
-          close(s);
-          handle_client(c);
-          close(c);
-          exit(0);
-      } else {
-          close(c);
-          waitpid(pid, NULL, 0);
-      }
+    memset(&buffer,0,sizeof(buffer));
+    /* now wait until we get a datagram */
+    printf("waiting for a datagram...\n");
+    if (recvfrom(sock, buffer, sizeof(buffer)+1, 0,
+		 (struct sockaddr *)&client,
+		 &clilen) < 0) {
+      perror("recvfrom failed");
+      exit(4);
+    }
+
+    /* now client_addr contains the address of the client */
+    printf("got '%s' from %s\n", buffer,
+	   inet_ntop(AF_INET6, &client.sin6_addr, addrbuf,
+		     INET6_ADDRSTRLEN));
+    printf("sending message back\n");
+    buffer[strlen(buffer)]='\0';
+    if (sendto(sock, buffer, sizeof(buffer)+1, 0,(struct sockaddr *)&client, clilen) < 0) {
+      perror("sendto failed");
+      exit(5);
+    }
+
   }
-  pthread_exit(NULL);
 }
 void start_serv()
 {

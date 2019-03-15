@@ -1,19 +1,3 @@
-/*
-  Example IPv6 UDP client.
-  Copyright (C) 2010 Russell Bradford
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License (http://www.gnu.org/copyleft/gpl.html)
-  for more details.
-*/
-
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -24,7 +8,7 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <time.h>
-#define PORT 12345
+#include "kernel.h"
 
 
 double ping(int sock, char *message,struct sockaddr_in6 serv){
@@ -89,7 +73,7 @@ double get_delay(char *address){
     perror("Incorrect format address in server");
     exit(1);
   }
-  server.sin6_port = htons(PORT);
+  server.sin6_port = htons(PORT_DELAY);
 
 
 

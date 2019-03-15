@@ -7,8 +7,8 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <pthread.h>
-#define PORT 12345
-#define MESSAGE "hello"
+#include "kernel.h"
+
 
 
 void run(){
@@ -43,7 +43,7 @@ void run(){
   memset(&server, 0, sizeof(server));
   server.sin6_family = AF_INET6;
   server.sin6_addr = in6addr_any;
-  server.sin6_port = htons(PORT);
+  server.sin6_port = htons(PORT_DELAY);
 
   /* associate the socket with the address and port */
   if (bind(sock, (struct sockaddr *)&server,servlen) < 0) {

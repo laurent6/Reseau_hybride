@@ -40,7 +40,7 @@ THE SOFTWARE.
 #include "local.h"
 #include "criteria.h"
 struct neighbour *neighs = NULL;
-/*******CAHNGE **************/
+/*******CHANGE **************/
 /*
 IF neighbour have difficuty to send packet we increase metric.
 */
@@ -142,7 +142,7 @@ find_neighbour(const unsigned char *address, struct interface *ifp)
     neigh->buf.sin6.sin6_scope_id = ifp->ifindex;
     neigh->next = neighs;
     neigh->delay = delay_neighbour(neigh);
-
+    fprintf(stdout,"delay = %f", neigh->delay);
     neighs = neigh;
     local_notify_neighbour(neigh, LOCAL_ADD);
     return neigh;
