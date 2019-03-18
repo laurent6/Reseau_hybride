@@ -23,11 +23,11 @@ all_mac_address = dict([("host1" ,"fe80::a000:ff:fe00:1"),
 
 nb_host = 7
 
-def list_of_host(list):
+def list_of_host_by_number(nb_host):
     a={}
-    for elt in list:
-        if elt in all_ip_address.keys():
-            a[elt] = all_ip_address[elt]
+    for elt in range(1,nb_host+1):
+            name="host"+str(elt)
+            a[name] = "2001:db8:3c4d:"+str(elt)+"::1"
 
     all_ip_address.clear()
     all_ip_address.update(a)
