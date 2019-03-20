@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include <netinet/in.h>
 #include <time.h>
 #include <assert.h>
-
+#include <arpa/inet.h>
 #include "babeld.h"
 #include "util.h"
 #include "interface.h"
@@ -38,9 +38,9 @@ THE SOFTWARE.
 #include "message.h"
 #include "resend.h"
 #include "local.h"
-
+#include "criteria.h"
 struct neighbour *neighs = NULL;
-/*******CAHNGE **************/
+/*******CHANGE **************/
 /*
 IF neighbour have difficuty to send packet we increase metric.
 */
@@ -54,7 +54,7 @@ void disable_metric_critical(struct  neighbour *neigh){
 }
 
 int is_neighboor_critical(struct  neighbour *neigh){
-  return neigh->add_metric_critical >0; 
+  return neigh->add_metric_critical >0;
 }
 
 
@@ -129,10 +129,20 @@ find_neighbour(const unsigned char *address, struct interface *ifp)
     neigh->buf.size = ifp->buf.size;
     neigh->buf.flush_interval = ifp->buf.flush_interval;
     neigh->buf.sin6.sin6_family = AF_INET6;
-    memcpy(&neigh->buf.sin6.sin6_addr, address, 16);
+    //memcpy(&neigh->buf.sin6.sin6_addr, address, 16);
+    if((inet_pton(AF_INET6, format_address(address), &neigh->buf.sin6.sin6_addr)) !=1){
+      perror("should'nt this Happened ");
+      exit(1);
+    }
+
+    fprintf(stdout, "Creating neighbour %s on %s , ,\n",
+           format_address(address), ifp->name);
+    fprintf(stdout," delais %d", neigh->delay);
     neigh->buf.sin6.sin6_port = htons(protocol_port);
     neigh->buf.sin6.sin6_scope_id = ifp->ifindex;
     neigh->next = neighs;
+    neigh->delay = delay_neighbour(neigh);
+    fprintf(stdout,"delay = %f", neigh->delay);
     neighs = neigh;
     local_notify_neighbour(neigh, LOCAL_ADD);
     return neigh;
