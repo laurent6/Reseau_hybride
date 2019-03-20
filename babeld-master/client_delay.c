@@ -57,7 +57,9 @@ unsigned ping(int sock, char *message,struct sockaddr_in6 serv){
     unsigned stop_in_milli = (unsigned)((stop.tv_sec)*1000 + (stop.tv_usec)/1000);
     int v2 =0;
     int p =0;
-    printf(" %lu",stop_in_milli-start_in_milli);
+    fprintf(stdout," \n\n %d, %d \n \t %d, %d\n",start.tv_sec, start.tv_usec , start.tv_sec,stop.tv_usec );
+    fprintf(stdout," ====== %u ====== \n",(stop_in_milli-start_in_milli) );
+    fflush(stdout);
     return stop_in_milli-start_in_milli;
 }
 unsigned get_delay(char *address){
