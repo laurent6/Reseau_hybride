@@ -41,4 +41,11 @@ def startPerf(nb_time,hosts, interface):
                 continue
             print("All link are unreachable")
 
+
+
+
+
+
+
+
     file.close()

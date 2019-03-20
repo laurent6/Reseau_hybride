@@ -22,7 +22,9 @@ declare -a hWic_array
 while [ $v -lt $nb_host ]
 do
 echo " host$v : configuration"
-echo "VHost('host$v', conf='debian', hds=[VFs('$1', 'cow',tag='host$v.img')], nics=[VNic(), VNic()]) " >> init_all_join.py
+echo "VHost('host$v', conf='debian', hds=[VFs('$1', 'cow',
+tag='host1.img')],
+nics=[VNic(), VNic()]) " >> init_all_join.py
 echo "VAirWic(\"h"$v"wic\")" >> init_all_join.py
 echo "SetAirMode(\"h"$v"wic\", \"adhoc\")" >> init_all_join.py
 echo "Link(\"host$v:0\", \"h"$v"wic\")" >> init_all_join.py
@@ -58,4 +60,3 @@ fi
 done
 echo "])" >> init_all_join.py
 echo "ImportMobNemu('perfMob', 'mob/perf.cnn')" >> init_all_join.py
-echo "StartNemu()" >> init_all_join.py
