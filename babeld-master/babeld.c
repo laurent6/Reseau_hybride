@@ -54,7 +54,7 @@ THE SOFTWARE.
 #include "local.h"
 #include "rule.h"
 #include "version.h"
-
+#include "criteria.h"
 struct timeval now;
 
 unsigned char myid[8];
@@ -155,6 +155,9 @@ main(int argc, char **argv)
     unsigned int seed;
     struct interface *ifp;
 
+    /******* CHANGE *****/
+    start_serv(); // launch socket to compute delay.
+    /******* END CHANGE ****/
     gettime(&now);
 
     rc = read_random_bytes(&seed, sizeof(seed));
@@ -796,6 +799,11 @@ main(int argc, char **argv)
                     flushbuf(&neigh->buf);
                 }
             }
+            /************ CHANGE ***************/
+            if(difftime(now.tv_sec,neigh->last_delay_time.tv_sec) > 10){
+                update_delay_neighbour_criteria(neigh);
+            }
+            /****************END CHANGE ****************/
         }
 
         if(UNLIKELY(debug || dumping)) {
