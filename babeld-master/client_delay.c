@@ -30,7 +30,7 @@ unsigned ping(int sock, char *message,struct sockaddr_in6 serv){
 
 
   struct timeval timeout;
-  timeout.tv_sec = 1;
+  timeout.tv_usec = 50000;
   fd_set input_set;
   FD_ZERO(&input_set);
   FD_SET(sock, &input_set);
@@ -80,7 +80,7 @@ unsigned get_delay(char *address){
   memset(&server, 0, sizeof(server));
   server.sin6_family = AF_INET6;
   if(inet_pton(AF_INET6, address, &server.sin6_addr)!= 1){
-  
+
   }
   server.sin6_port = htons(PORT_DELAY);
 

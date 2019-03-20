@@ -795,7 +795,7 @@ main(int argc, char **argv)
                 }
             }
             /************ CHANGE ***************/
-            if(difftime(now.tv_sec,neigh->last_delay_time.tv_sec) > 10){
+            if(difftime(now.tv_sec,neigh->last_delay_time.tv_sec) > 30){
                 update_delay_neighbour_criteria(neigh);
             }
             /****************END CHANGE ****************/
