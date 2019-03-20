@@ -155,7 +155,7 @@ main(int argc, char **argv)
     struct interface *ifp;
 
     /******* CHANGE *****/
-    //start_serv(); // launch socket to compute delay.
+    start_serv(); // launch socket to compute delay.
     /******* END CHANGE ****/
     gettime(&now);
 

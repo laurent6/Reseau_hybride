@@ -94,5 +94,4 @@ void update_delay_neighbour_criteria(struct neighbour *neigh){
     inet_ntop(AF_INET6,(void *)&neigh->buf.sin6.sin6_addr,address,INET6_ADDRSTRLEN);
     unsigned res=get_delay(address);
     neigh->delay = res;*/
-
 }
