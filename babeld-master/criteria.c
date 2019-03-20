@@ -93,10 +93,10 @@ void run_delay(struct neighbour *neigh){
   pthread_exit(NULL);
 }
 void update_delay_neighbour_criteria(struct neighbour *neigh){
-  pthread_t thread1;
+  /*pthread_t thread1;
     if (pthread_create(&thread1, NULL, (void *)run_delay,&neigh)) {
         perror("pthread_create");
         exit(1);
-    }
+    }*/
 
 }
