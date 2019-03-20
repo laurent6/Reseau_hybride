@@ -5,7 +5,7 @@ import os
 import string
 import subprocess
 def startPerf(nb_time,hosts, interface):
-    route.list_of_host(hosts)
+    route.list_of_host_by_number(int(hosts))
     print("\033[1m"+"PERFORMANCE TEST".center(80) + "\033[0m")
     file = open("perf", "w")
     print("\t Please,  "
@@ -48,4 +48,8 @@ def startPerf(nb_time,hosts, interface):
 
 
 
+<<<<<<< HEAD
     file.close()
+=======
+    file.close()
+>>>>>>> 7aafacbcc85c890e84225d5cdad22ca9ea093e11
