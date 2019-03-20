@@ -51,7 +51,7 @@ unsigned ping(int sock, char *message,struct sockaddr_in6 serv){
 
   if(strcmp(buffer_reception, message) !=0){
     printf("rentre \n");
-      return 0;
+      return 999;
     }
     unsigned start_in_milli = (unsigned)((start.tv_sec)*1000 + (start.tv_usec)/1000);
     unsigned stop_in_milli = (unsigned)((stop.tv_sec)*1000 + (stop.tv_usec)/1000);
