@@ -7,13 +7,16 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include <sys/time.h>
 #include <time.h>
 #include "kernel.h"
+#include "util.h"
 
 
-double ping(int sock, char *message,struct sockaddr_in6 serv){
+unsigned ping(int sock, char *message,struct sockaddr_in6 serv){
   struct sockaddr_in6 cli;
-  clock_t t;
+  struct timeval start;
+  struct timeval stop;
   socklen_t clilen= sizeof(cli);
   socklen_t servlen = sizeof(serv);
   char buffer_reception[10];
@@ -22,7 +25,7 @@ double ping(int sock, char *message,struct sockaddr_in6 serv){
       perror("sendto failed");
       exit(1);
   }
-  t = clock();
+  gettimeofday(&start, NULL);
   memset(&buffer_reception, 0, sizeof(buffer_reception));
 
 
@@ -38,7 +41,7 @@ double ping(int sock, char *message,struct sockaddr_in6 serv){
         perror("recvfrom failed");
         exit(1);
     }
-    t = clock() -t;
+    gettimeofday(&stop,NULL);
   }
   char addrbuf[INET6_ADDRSTRLEN];
   /*printf("got '%s' from %s with send '%s'\n", buffer_reception,
@@ -47,15 +50,19 @@ double ping(int sock, char *message,struct sockaddr_in6 serv){
 
 
   if(strcmp(buffer_reception, message) !=0){
+    printf("rentre\n");
       return 0;
     }
-    return ((double)t)/CLOCKS_PER_SEC;;
-
+    unsigned start_in_milli = (unsigned)((start.tv_sec)*1000 + (start.tv_usec)/1000);
+    unsigned stop_in_milli = (unsigned)((stop.tv_sec)*1000 + (stop.tv_usec)/1000);
+    int v2 =0;
+    int p =0;
+    return stop_in_milli-start_in_milli;
 }
-double get_delay(char *address){
+unsigned get_delay(char *address){
   int sock;
   struct sockaddr_in6 server;
-  double time_average=0;
+  unsigned time_average=0;
   char *string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   size_t stringLen = strlen(string);
   char string_to_send[10];
@@ -84,13 +91,13 @@ double get_delay(char *address){
        string_to_send[j] = string[key];
     }
     string_to_send[9]='\0';
-    double res=0;
+    unsigned res=0;
     if((res=ping(sock, string_to_send,server)) > 0){
       time_average =  (time_average +res)/2;
     }
 
   }
   close(sock);
-  return time_average*1000;
+  return time_average;
 
 }

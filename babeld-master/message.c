@@ -750,7 +750,9 @@ parse_packet(const unsigned char *from, struct interface *ifp,
                 if(!ifp->ipv4)
                     goto done;
             }
-
+            /******* CHANGED *********/
+            update_metric_delay_criteria(&metric,neigh);
+            /*************************/
             update_route(router_id, prefix, plen, src_prefix, src_plen, seqno,
                          metric, interval, neigh, nh,
                          channels, channels_len);
@@ -1105,8 +1107,11 @@ really_buffer_update(struct buffered *buf, struct interface *ifp,
    add_metric = output_filter(id, prefix, plen, src_prefix,
                                src_plen, ifp->ifindex);
     debugf("metric before battery criteria : %d ifp->cost : %d\n", add_metric, ifp->cost);
-    if(metric >0 && metric != 256 && metric < (int)INFINITY/2)
+    if(metric >0 && metric != 256 && metric < (int)INFINITY/2){
       update_metric_battery_criteria(&add_metric);
+
+    }
+
     debugf("metric after battery criteria : %d \n", add_metric);
   /**END_CHANGE **/
 
@@ -1231,7 +1236,6 @@ compare_buffered_updates(const void *av, const void *bv)
 {
     const struct buffered_update *a = av, *b = bv;
     int rc, v4a, v4b, ma, mb;
-
     rc = memcmp(a->id, b->id, 8);
     if(rc != 0)
         return rc;

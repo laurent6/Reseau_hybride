@@ -80,9 +80,16 @@ void push_criteria(struct buffered *buf){
   push_battery_buff(buf);
 }
 
-int delay_neighbour(struct neighbour *neigh){
+void update_metric_delay_criteria(short unsigned int *metric, struct neighbour *neigh){
+  if(neigh->delay > 0){
+    *metric += neigh->delay;
+  }
+}
+
+void update_delay_neighbour_criteria(struct neighbour *neigh){
   char address[INET6_ADDRSTRLEN];
   inet_ntop(AF_INET6,(void *)&neigh->buf.sin6.sin6_addr,address,INET6_ADDRSTRLEN);
   fprintf(stdout," adress : %s",address);
-  return get_delay(address);
+  unsigned res=get_delay(address);
+  neigh->delay = res;
 }

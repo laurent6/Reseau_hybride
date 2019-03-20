@@ -113,7 +113,7 @@ int change_rule(int new_prio, int old_prio, const unsigned char *src, int plen,
                 int table);
 
 /***** CHANGE ****/
-double get_delay(char *address);
+unsigned get_delay(char *address);
 void start_serv();
 
 /********* END CHANGE ***/
