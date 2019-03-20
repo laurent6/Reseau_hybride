@@ -50,7 +50,7 @@ struct timeval now;
 unsigned char myid[8];
 int have_id = 0;
 int debug = 0;
-
+extern int use_battery;
 int link_detect = 0;
 int all_wireless = 0;
 int has_ipv6_subtrees = 0;

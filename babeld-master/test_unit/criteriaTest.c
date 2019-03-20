@@ -57,6 +57,7 @@ THE SOFTWARE.
 #include "../babeld.h"
 #include "../criteria.h"
 
+int use_battery=0;
 void testBattery(){
 
   //set battery
