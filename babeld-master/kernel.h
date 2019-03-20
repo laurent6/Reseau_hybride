@@ -76,7 +76,7 @@ struct kernel_filter {
 #ifndef MAX_IMPORT_TABLES
 #define MAX_IMPORT_TABLES 10
 
-#define PORT_DELAY 12345
+#define PORT_DELAY 60000
 #endif
 
 extern int export_table, import_tables[MAX_IMPORT_TABLES], import_table_count;
