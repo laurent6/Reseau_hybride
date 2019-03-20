@@ -54,13 +54,14 @@ THE SOFTWARE.
 #include "local.h"
 #include "rule.h"
 #include "version.h"
-#include "criteria.h"
+
 struct timeval now;
 
 unsigned char myid[8];
 int have_id = 0;
 int debug = 0;
 
+int use_battery = 0;
 int link_detect = 0;
 int all_wireless = 0;
 int has_ipv6_subtrees = 0;
@@ -154,9 +155,6 @@ main(int argc, char **argv)
     unsigned int seed;
     struct interface *ifp;
 
-    /******* CHANGE *****/
-    start_serv(); // launch socket to compute delay.
-    /******* END CHANGE ****/
     gettime(&now);
 
     rc = read_random_bytes(&seed, sizeof(seed));
@@ -175,7 +173,7 @@ main(int argc, char **argv)
 
     while(1) {
         opt = getopt(argc, argv,
-                     "m:p:h:H:i:k:A:srS:d:g:G:lwz:M:t:T:c:C:DL:I:V");
+                     "m:p:h:H:i:k:A:srS:d:g:G:lwz:M:t:T:c:C:DL:I:V:b");
         if(opt < 0)
             break;
 
@@ -319,6 +317,10 @@ main(int argc, char **argv)
         case 'V':
             fprintf(stderr, "%s\n", BABELD_VERSION);
             exit(0);
+            break;
+        /* Battery option */
+        case 'b':
+            use_battery = 1;
             break;
         default:
             goto usage;
@@ -794,11 +796,6 @@ main(int argc, char **argv)
                     flushbuf(&neigh->buf);
                 }
             }
-            /************ CHANGE ***************/
-            if(difftime(now.tv_sec,neigh->last_delay_time.tv_sec) > 10){
-                update_delay_neighbour_criteria(neigh);
-            }
-            /****************END CHANGE ****************/
         }
 
         if(UNLIKELY(debug || dumping)) {
@@ -881,7 +878,7 @@ main(int argc, char **argv)
             "               "
             "[-u] [-t table] [-T table] [-c file] [-C statement]\n"
             "               "
-            "[-d level] [-D] [-L logfile] [-I pidfile]\n"
+            "[-d level] [-D] [-L logfile] [-I pidfile] [-b]\n"
             "               "
             "interface...\n",
             BABELD_VERSION);
