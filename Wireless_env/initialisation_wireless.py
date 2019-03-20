@@ -1,13 +1,12 @@
 # path to debian image 
-path_sys="/net/cremi/lbouquin/public/debian9.img"
-session_name='../Wireless_Test/wireless_network3'
+path_sys="/net/cremi/lbouquin/espaces/travail/debian9.img"
+session_name='../Wireless_Test/wireless_network2'
 
 InitNemu(session=session_name, workspace='.', hdcopy=False)
 
 # configuration host. 
 VHostConf('debian', localtime=None, k='fr', display='sdl', vga='std', enable_kvm=None, cpu='kvm64', m='2G')
 
-VHostConf('debian2', localtime=None, k='fr', display='sdl', vga='std', enable_kvm=None, cpu='kvm64', m='1G')
 
 # hosts 
 VHost('host1', conf='debian', hds=[VFs(path_sys, 'cow', 
@@ -77,12 +76,6 @@ Join("h5wic", "h7wic")
 Join("h3wic", "h7wic")
 
 
-
-
-
-
-
-
 # connect to internet, aim to install protocol. 
 VSlirp('slirp1', net='192.168.0.0/24')
 Link(client='host1:1', core='slirp1')
@@ -105,9 +98,9 @@ Link(client='host6:1', core='slirp6')
 VSlirp('slirp7', net='192.168.0.0/24')
 Link(client='host7:1', core='slirp7')
 
-MobNemu('perfMob', nodes=['h1wic','h2wic','h3wic','h4wic','h5wic','h6wic','h7wic'])
-#GenMobNemu('perfMob', width=1000, height=1000, time=20, events=100)
-ImportMobNemu('perfMob', 'mob/perf.cnn')
+MobNemu('mobPerf', nodes=['h1wic','h2wic','h3wic','h4wic','h5wic','h6wic','h7wic'])
+#GenMobNemu('mobPerf', width=1000, height=1000, time=20, events=100)
+ImportMobNemu('mobPerf', 'mob/perf.cnn')
 
 
 StartNemu()

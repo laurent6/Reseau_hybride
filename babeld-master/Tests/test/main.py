@@ -12,7 +12,7 @@ def main():
 
 def usage():
     print("usage: \n\t -b : to test battery criteria"+
-          "\n\t -p <nb_Perf> <number_of_host>): performance test nb_times "+
+          "\n\t -p <nb_Perf> <list_of_hosts): performance test nb_times "+
           "\n\t -h : display help")
 if __name__ == "__main__":
     #main()
@@ -26,20 +26,15 @@ if __name__ == "__main__":
             usage()
             sys.exit(0)
         elif opt in ("-p","--nbPerf", "--list"):
-            if len(args) != 1:
-                print("Number of arg are incorrect")
-                usage()
-            elif not str.isdigit(args[0]):
-                print(str(type(args[0]))+ " arg = "+ str(args[0]))
-                print("arg of this option must be  an Integer")
+            if args == []:
                 usage()
             else:
-                '''print("before")
+                ''''print("before")
                 route.print_all_ip_address()
-                route.list_of_host_by_number(int(args[0]))
+                route.list_of_host(args)
                 print("after")
                 route.print_all_ip_address()'''
-                perf.startPerf(int(arg), args[0], "ens3")
+                perf.startPerf(int(arg), args, "ens3")
         elif opt == '-b':
             babel.test_downBattery()
 
