@@ -5,7 +5,7 @@ import os
 import string
 import subprocess
 def startPerf(nb_time,hosts, interface):
-    route.list_of_host(hosts)
+    route.list_of_host_by_number(hosts)
     print("\033[1m"+"PERFORMANCE TEST".center(80) + "\033[0m")
     file = open("perf", "w")
     print("\t Please,  "
@@ -40,12 +40,5 @@ def startPerf(nb_time,hosts, interface):
             while route.is_reachable_link("host2"):
                 continue
             print("All link are unreachable")
-
-
-
-
-
-
-
 
     file.close()
