@@ -23,6 +23,7 @@ all_mac_address = dict([("host1" ,"fe80::a000:ff:fe00:1"),
 
 nb_host = 7
 
+
 def list_of_host(list):
     a={}
     for elt in list:
@@ -92,7 +93,9 @@ def ping_all_hosts():
 
 
 def is_reachable_link(host):
-
-        cmd = "ping6  -I ens3 " + all_mac_address[host]+" -c 1 -w 1  >/dev/null 2>&1"
-        res = os.system(cmd)
-        return res == 0
+        cmd = "ifconfig |grep 'ens3' >/dev/null"
+        if not subprocess.call(cmd, shell=True):
+            cmd = "ping6  -I ens3 " + all_mac_address[host]+" -c 1 -w 1  >/dev/null 2>&1"
+            res = subprocess.call(cmd, shell=True)
+            return res == 0
+        return False

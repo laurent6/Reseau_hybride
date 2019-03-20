@@ -4,6 +4,7 @@ import time
 import os
 import string
 import subprocess
+
 def startPerf(nb_time,hosts, interface):
     route.list_of_host_by_number(int(hosts))
     print("\033[1m"+"PERFORMANCE TEST".center(80) + "\033[0m")
@@ -18,7 +19,7 @@ def startPerf(nb_time,hosts, interface):
         exit(1)'''
     i=0
     while i < nb_time:
-        while not route.is_reachable_link("host2"):
+        while not route.is_reachable_link("host5"):
             continue
         print("All link reachable ")
         start_time = time.time()
@@ -30,14 +31,13 @@ def startPerf(nb_time,hosts, interface):
 
         end_time = time.time()
         if is_on_time:
-            print(" \t "+ str(i) +") Save time stabilisation of all routes :" + str(end_time-start_time) +"s")
+            print(" \t Save time stabiliszation of all routes :" + str(end_time-start_time) +"s")
             file.write("\n" +str(i)+"\t" + str(end_time-start_time))
         else :
             print("\t Problem with synchronisation continue ")
         i = i + 1
-
         if(i < nb_time):
-            while route.is_reachable_link("host2"):
+            while route.is_reachable_link("host5"):
                 continue
             print("All link are unreachable")
 
@@ -48,8 +48,4 @@ def startPerf(nb_time,hosts, interface):
 
 
 
-<<<<<<< HEAD
     file.close()
-=======
-    file.close()
->>>>>>> 7aafacbcc85c890e84225d5cdad22ca9ea093e11
