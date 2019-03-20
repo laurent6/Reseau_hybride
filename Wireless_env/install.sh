@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #configuration  interffaces
-until [[ ${nombre} =~ ^[0-9]+$ ]]; do
+until [[ ${host_number} =~ ^[0-9]+$ ]]; do
 echo " What is the host's number ?"
 read nombre
 done
@@ -9,12 +9,17 @@ done
 cat /etc/network/interfaces | grep "ens3" >>/dev/null
 if [ $? == 1 ]
 then
-	cat interfaces/host$nombre.txt >> /etc/network/interfaces
+	echo "
+auto ens3
+iface ens3 inet6 static
+			address 2001:db8:3c4d:$host_number::1
+			netmask 64
+" >> /etc/network/interfaces
 	echo -ne "restart network ... "
 	service networking restart
 	echo " Done "
 else
-	cat /etc/network/interfaces | grep "2001:db8:3c4d:$nombre::1" >>/dev/null
+	cat /etc/network/interfaces | grep "2001:db8:3c4d:$host_number::1" >>/dev/null
 	if [ $? == 1 ]; then
 		(>&2 echo "Error : another configuration found please del this configuration and  restart this installation")
 		exit 1
@@ -28,13 +33,13 @@ mv -f /etc/apt/sources.list.tmp /etc/apt/sources.list
 
 # compile  our protocol
 tmp_path=$(pwd)
-echo -ne "Compile babel protocol ... " 
+echo -ne "Compile babel protocol ... "
 cd  ../babeld-master && make >/dev/null
 cd test_unit && make >/dev/null
 cd $tmp_path
 echo " Done"
 
 #update
-apt update -y
+#apt update -y
 #install killall usefull to test protocol
-apt-get install psmisc -y
+#apt-get install psmisc -y
