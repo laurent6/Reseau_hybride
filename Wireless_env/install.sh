@@ -1,48 +1,41 @@
 #!/bin/bash
 
-## save path to installer files
-cd "$( cd "$( dirname "$0" )" && pwd )"
-InstallerPath=${PWD}
+#configuration  interffaces
+until [[ ${nombre} =~ ^[0-9]+$ ]]; do
+echo " What is the host's number ?"
+read nombre
+done
 
-## find PlexConnect main path
-cd ../..
-PlexConnectPath=${PWD}
-
-## check SSL certificate
-file="${PlexConnectPath}/assets/certificates/trailers.pem"
-if [ -f "$file" ]; then
-    echo 'SSL certificate '$file' found.' 
-
+cat /etc/network/interfaces | grep "ens3" >>/dev/null
+if [ $? == 1 ]
+then
+	cat interfaces/host$nombre.txt >> /etc/network/interfaces
+	echo -ne "restart network ... "
+	service networking restart
+	echo " Done "
 else
-    ## if not, print a reminder
-    echo 'SSL certificate '$file' not found.'
-    echo '- is it stored in a different place?'
-    echo '  -> make sure to edit Settings.cfg and restart PlexConnect'
-    echo '- did you already create one?'
-    echo '  -> run createcert.bash'
+	cat /etc/network/interfaces | grep "2001:db8:3c4d:$nombre::1" >>/dev/null
+	if [ $? == 1 ]; then
+		(>&2 echo "Error : another configuration found please del this configuration and  restart this installation")
+		exit 1
+	fi
 
 fi
 
-## create autostart plist for next boot
-echo 'Installing PlexConnect...'
+# Make sure that we can update and install with extern sources.
+grep -v "cdrom" /etc/apt/sources.list > /etc/apt/sources.list.tmp
+mv -f /etc/apt/sources.list.tmp /etc/apt/sources.list
 
-## replace __INSTALLERPATH__, __PLEXCONNECTPATH__ in default com.plex.plexconnect.daemon.bash.plist
-## save directly to the /Library/LaunchDameons folder
-sed -e "s/__INSTALLERPATH__/${InstallerPath//\//\\/}/;s/__PLEXCONNECTPATH__/${PlexConnectPath//\//\\/}/" "${InstallerPath}/com.plex.plexconnect.bash.plist" > /Library/LaunchDaemons/com.plex.plexconnect.bash.plist
+# compile  our protocol
+tmp_path=$(pwd)
+echo -ne "Compile babel protocol ... " 
+cd  ../babeld-master && make >/dev/null
+cd test_unit && make >/dev/null
+cd $tmp_path
+echo " Done"
 
-## change ownership and permissions of the plist file to make it launchctl compatible
-chown root /Library/LaunchDaemons/com.plex.plexconnect.bash.plist
-chmod 644 /Library/LaunchDaemons/com.plex.plexconnect.bash.plist
+#update
+#apt update -y
+#install killall usefull to test protocol
+#apt-get install psmisc -y
 
-## start PlexConnect for this session
-echo 'Starting PlexConnect...'
-
-## launch the plist so that we can use it without a reboot
-launchctl load /Library/LaunchDaemons/com.plex.plexconnect.bash.plist
-
-## wait a couple seconds to allow PlexConnect to load
-sleep 2
-
-## display the running status of PlexConnect
-#./PlexConnect_daemon.bash status
-launchctl list | grep com.plex.plexconnect.bash
