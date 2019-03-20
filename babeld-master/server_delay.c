@@ -73,11 +73,11 @@ void run(){
 }
 void start_serv()
 {
-  /*pthread_t thread1;
+  pthread_t thread1;
     if (pthread_create(&thread1, NULL, (void *)run, NULL)) {
         perror("pthread_create");
         exit(1);
-    }*/
+    }
 
 
 }

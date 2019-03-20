@@ -44,22 +44,15 @@ unsigned ping(int sock, char *message,struct sockaddr_in6 serv){
     gettimeofday(&stop,NULL);
   }
   char addrbuf[INET6_ADDRSTRLEN];
-  /*printf("got '%s' from %s with send '%s'\n", buffer_reception,
-   inet_ntop(AF_INET6, &cli.sin6_addr, addrbuf,
-       INET6_ADDRSTRLEN),message);*/
 
 
   if(strcmp(buffer_reception, message) !=0){
-    printf("rentre \n");
       return (unsigned)0;
     }
     unsigned start_in_milli = (unsigned)((start.tv_sec)*1000 + (start.tv_usec)/1000);
     unsigned stop_in_milli = (unsigned)((stop.tv_sec)*1000 + (stop.tv_usec)/1000);
     int v2 =0;
     int p =0;
-    fprintf(stdout," \n\n %d, %d \n \t %d, %d\n",start.tv_sec, start.tv_usec , start.tv_sec,stop.tv_usec );
-    fprintf(stdout," ====== %u ====== \n",(stop_in_milli-start_in_milli) );
-    fflush(stdout);
     return stop_in_milli-start_in_milli;
 }
 unsigned get_delay(char *address){
