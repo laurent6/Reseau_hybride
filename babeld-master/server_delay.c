@@ -34,7 +34,7 @@ void run(){
   // unset, it accepts v6 and v4 (mapped address) connections
   { int opt = 1;
     if (setsockopt(sock, IPPROTO_IPV6, IPV6_V6ONLY, &opt, sizeof(opt)) < 0) {
-    
+
     }
   }
 #endif
@@ -73,11 +73,11 @@ void run(){
 }
 void start_serv()
 {
-  pthread_t thread1;
+  /*pthread_t thread1;
     if (pthread_create(&thread1, NULL, (void *)run, NULL)) {
         perror("pthread_create");
         exit(1);
-    }
+    }*/
 
 
 }
