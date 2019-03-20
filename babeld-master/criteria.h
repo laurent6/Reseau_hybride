@@ -1,4 +1,8 @@
 
+
+
+
+
 #define MESSAGE_BATTERY 40
 #define LENGTH_ALL_CRITERIA 3
 #define LENGTH_CRITERIA_BATTERY 1
