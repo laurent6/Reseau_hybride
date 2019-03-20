@@ -61,6 +61,7 @@ unsigned char myid[8];
 int have_id = 0;
 int debug = 0;
 
+int use_battery = 0;
 int link_detect = 0;
 int all_wireless = 0;
 int has_ipv6_subtrees = 0;
@@ -144,7 +145,7 @@ kernel_rule_notify(struct kernel_rule *rule, void *closure)
 
 int
 main(int argc, char **argv)
-{ 
+{
     struct sockaddr_in6 sin6;
     int rc, fd, i, opt;
     time_t expiry_time, source_expiry_time, kernel_dump_time;
@@ -172,7 +173,7 @@ main(int argc, char **argv)
 
     while(1) {
         opt = getopt(argc, argv,
-                     "m:p:h:H:i:k:A:srS:d:g:G:lwz:M:t:T:c:C:DL:I:V");
+                     "m:p:h:H:i:k:A:srS:d:g:G:lwz:M:t:T:c:C:DL:I:V:b");
         if(opt < 0)
             break;
 
@@ -316,6 +317,10 @@ main(int argc, char **argv)
         case 'V':
             fprintf(stderr, "%s\n", BABELD_VERSION);
             exit(0);
+            break;
+        /* Battery option */
+        case 'b':
+            use_battery = 1;
             break;
         default:
             goto usage;
@@ -567,7 +572,7 @@ main(int argc, char **argv)
     FOR_ALL_INTERFACES(ifp) {
         if(!if_up(ifp))
             continue;
-        /* Apply jitter before we send the first message. */
+        /* Apply jitter before we send the first message.*/
         usleep(roughly(10000));
         gettime(&now);
         send_hello(ifp);
@@ -588,8 +593,6 @@ main(int argc, char **argv)
         flushupdates(ifp);
         flushbuf(&ifp->buf);
     }
-
-    debugf("Entering main loop.\n");
 
     while(1) {
         struct timeval tv;
@@ -875,7 +878,7 @@ main(int argc, char **argv)
             "               "
             "[-u] [-t table] [-T table] [-c file] [-C statement]\n"
             "               "
-            "[-d level] [-D] [-L logfile] [-I pidfile]\n"
+            "[-d level] [-D] [-L logfile] [-I pidfile] [-b]\n"
             "               "
             "interface...\n",
             BABELD_VERSION);

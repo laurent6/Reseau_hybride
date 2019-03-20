@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include "configuration.h"
 /****** CHANGE ******/
 #include "criteria.h"
+
 unsigned char packet_header[4] = {42, 2};
 
 int split_horizon = 1;
@@ -491,10 +492,7 @@ parse_packet(const unsigned char *from, struct interface *ifp,
         /*****************CAHNGE **********************/
 	if(type == MESSAGE_CRITERIA){
 	//unsigned int tmp=0;
-	  /*printf(" type %d \n ", tmp);
-	  printf(" length  %d \n", tmp );
-	  printf ("new type %d \n", (int)message[2]);
-	  printf("new length %d \n", (int)message[3]);*/
+
     disable_metric_critical(neigh);
 	  debugf(" receive type :%d , battery  %d \n",type, (int)message[4]);
     int battery = (int)message[4];

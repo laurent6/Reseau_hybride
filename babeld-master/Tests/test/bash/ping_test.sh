@@ -19,4 +19,3 @@ if [ "$failed" -eq 1 ]; then
 else
 	echo "All hosts reachable"
 fi
-
