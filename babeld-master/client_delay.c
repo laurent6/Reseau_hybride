@@ -50,12 +50,14 @@ unsigned ping(int sock, char *message,struct sockaddr_in6 serv){
 
 
   if(strcmp(buffer_reception, message) !=0){
+    printf("rentre \n");
       return 0;
     }
     unsigned start_in_milli = (unsigned)((start.tv_sec)*1000 + (start.tv_usec)/1000);
     unsigned stop_in_milli = (unsigned)((stop.tv_sec)*1000 + (stop.tv_usec)/1000);
     int v2 =0;
     int p =0;
+    printf(" %lu",stop_in_milli-start_in_milli);
     return stop_in_milli-start_in_milli;
 }
 unsigned get_delay(char *address){
