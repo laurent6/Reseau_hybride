@@ -86,17 +86,13 @@ void update_metric_delay_criteria(short unsigned int *metric, struct neighbour *
   }
 }
 void run_delay(struct neighbour *neigh){
+
+
+}
+void update_delay_neighbour_criteria(struct neighbour *neigh){
   char address[INET6_ADDRSTRLEN];
   inet_ntop(AF_INET6,(void *)&neigh->buf.sin6.sin6_addr,address,INET6_ADDRSTRLEN);
   unsigned res=get_delay(address);
   neigh->delay = res;
-  pthread_exit(NULL);
-}
-void update_delay_neighbour_criteria(struct neighbour *neigh){
-  /*pthread_t thread1;
-    if (pthread_create(&thread1, NULL, (void *)run_delay,&neigh)) {
-        perror("pthread_create");
-        exit(1);
-    }*/
 
 }

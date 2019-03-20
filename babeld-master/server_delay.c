@@ -68,7 +68,7 @@ void run(){
 		     INET6_ADDRSTRLEN);
     //printf("sending message back\n");
     buffer[strlen(buffer)]='\0';
-    sleep(0.05); 
+    sleep(0.1); 
     if (sendto(sock, buffer, sizeof(buffer)+1, 0,(struct sockaddr *)&client, clilen) < 0) {
       perror("sendto failed");
       exit(5);
