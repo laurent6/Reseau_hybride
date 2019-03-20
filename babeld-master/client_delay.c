@@ -80,8 +80,7 @@ unsigned get_delay(char *address){
   memset(&server, 0, sizeof(server));
   server.sin6_family = AF_INET6;
   if(inet_pton(AF_INET6, address, &server.sin6_addr)!= 1){
-    perror("Incorrect format address in server");
-    exit(1);
+  
   }
   server.sin6_port = htons(PORT_DELAY);
 

@@ -34,8 +34,7 @@ void run(){
   // unset, it accepts v6 and v4 (mapped address) connections
   { int opt = 1;
     if (setsockopt(sock, IPPROTO_IPV6, IPV6_V6ONLY, &opt, sizeof(opt)) < 0) {
-      perror("setting option IPV6_V6ONLY");
-      exit(1);
+    
     }
   }
 #endif
@@ -47,8 +46,7 @@ void run(){
 
   /* associate the socket with the address and port */
   if (bind(sock, (struct sockaddr *)&server,servlen) < 0) {
-    perror("Bind failed");
-    exit(2);
+
   }
 
   while (1) {
@@ -58,8 +56,7 @@ void run(){
     if (recvfrom(sock, buffer, sizeof(buffer)+1, 0,
 		 (struct sockaddr *)&client,
 		 &clilen) < 0) {
-      perror("recvfrom failed");
-      exit(4);
+
     }
 
     /* now client_addr contains the address of the client */
@@ -69,8 +66,7 @@ void run(){
     //printf("sending message back\n");
     buffer[strlen(buffer)]='\0';
     if (sendto(sock, buffer, sizeof(buffer)+1, 0,(struct sockaddr *)&client, clilen) < 0) {
-      perror("sendto failed");
-      exit(5);
+
     }
 
   }
