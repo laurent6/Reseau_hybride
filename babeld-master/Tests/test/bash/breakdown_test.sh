@@ -20,7 +20,7 @@ declare -a nroute
 #get route
 for host in $hosts; do
 		route["$host"]="$(route -6 | grep "2001:db8:3c4d:"$host"::1")"
-		echo "rentre"
+		
 done
 
 while true; do
