@@ -22,9 +22,7 @@ def startB(interface):
 
 def stopB(interface):
     print("Stop babeld protocol ... ", end='')
-    os.system("rm -f /var/run/babeld.pid > /dev/null 2>&1")
-    os.system("killall -9 babeld > /dev/null 2>&1")
-    time.sleep(10)
+    os.system("pkill babeld > /dev/null 2>&1")
     print("Done ! ")
 
 
@@ -32,6 +30,7 @@ def test_downBattery():
     print("\033[1m " +"TEST BATTERY CRITERIA".center(80) + "\033[0m")
     print(" \t Make sure that host5's battery is over than 15% and all host are up")
     input("Press Enter to continue... ")
+    stopB("ens3")
     startB("ens3")
     print("Checking all routes ... ", end='')
     start_time = time.time()

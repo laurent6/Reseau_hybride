@@ -9,13 +9,14 @@ def startPerf(nb_time,hosts, interface):
     print("\033[1m"+"PERFORMANCE TEST".center(80) + "\033[0m")
     file = open("perf", "w")
     print("\t Please,  "
-          "\n\t\t 1)  start {PATH_To_Babel}/daemon_connect_neighboor.sh in all Host"
-          "\n\t\t 2) Start mobilizer in Nemu prompt  ( 1) can be do before 2) )")
+          "\n\t\t 1) Start {PATH_To_Babel}/Tests/test/bash/"
+          "daemon_connect_neighboor.sh in all Host"
+          "\n\t\t 2) Start mobilizer in Nemu prompt  ")
     input("Press Enter to continue ... ")
     time_mobilizer = time.time()
-    '''if subprocess.call("ps -a |grep 'babeld' >/dev/null", shell=True) == 1:
+    if subprocess.call("ps -a |grep 'babeld' >/dev/null", shell=True) == 1:
         print("\033[91m  \033[1m Babel is not Starting ")
-        exit(1)'''
+        exit(1)
     i=0
     while i < nb_time:
         while not route.is_reachable_link("host2"):
@@ -33,7 +34,7 @@ def startPerf(nb_time,hosts, interface):
             print(" \t "+ str(i) +") Save time stabilisation of all routes :" + str(end_time-start_time) +"s")
             file.write("\n" +str(i)+"\t" + str(end_time-start_time))
         else :
-            print("\t Problem with synchronisation continue ")
+            print("\t"+ str(i) +") Problem with synchronisation continue ")
         i = i + 1
 
         if(i < nb_time):

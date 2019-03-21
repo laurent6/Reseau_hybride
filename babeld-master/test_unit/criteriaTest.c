@@ -73,7 +73,7 @@ void testBattery(){
     fclose(f);
   }
 
-
+use_battery=1;
 struct buffered *buf;
 buf = malloc(sizeof(struct buffered));
 buf->len =0;

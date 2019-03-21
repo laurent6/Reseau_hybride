@@ -23,13 +23,13 @@ filterResult()
 
 }
 stopBabel(){
-  killall babeld >/dev/null 2>&1
+  pkill babeld >/dev/null 2>&1
   rm /var/run/babeld.pid >/dev/null 2>&1
 }
 startBabel()
 {
   #start babel
-    /root/reseau_hybride/babeld-master/babeld ens3 >/dev/null 2>&1 &
+    /root/reseau_hybride/babeld-master/babeld ens3  >/dev/null 2>&1 &
 }
 #find all neighboor
 var=($(ping6 -I ens3 ff02::1 -c 5 ))
