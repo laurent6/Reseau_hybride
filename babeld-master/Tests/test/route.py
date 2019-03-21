@@ -25,7 +25,7 @@ nb_host = 7
 
 def list_of_host_by_number(nb_host):
     a={}
-    for elt in range(1,nb_host+1):
+    for elt in range(1,int(nb_host)+1):
             name="host"+str(elt)
             a[name] = "2001:db8:3c4d:"+str(elt)+"::1"
 
