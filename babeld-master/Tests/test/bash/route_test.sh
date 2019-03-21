@@ -1,7 +1,18 @@
 #!/bin/bash
+if [ -z "$1" ]; then
+	echo "Usage : ./route.sh <nb_host>"
+	exit 1
+fi
 
+var=$1
+let $var 2>/dev/null
+ret=$?
+if [[ $ret -eq 1 ]]; then
+	echo "arg must be unsigned Integer"
+	exit 1
+fi
 #variables
-hosts="1 2 3 4 5 6 7"
+hosts=$(seq 1 $var)
 time_update=5
 declare -a route
 declare -a nroute
@@ -9,8 +20,8 @@ declare -a nroute
 #get route
 for host in $hosts; do
 		route["$host"]="$(route -6 -n | grep "2001:db8:3c4d:"$host"::1")"
-		#check if host have route		
-		if [ -z "${route["$host"]}" ]; then		
+		#check if host have route
+		if [ -z "${route["$host"]}" ]; then
 			echo "no route for 2001:db8:3c4d:"$host"::1"
 		else
 			echo "${route["$host"]}"
@@ -20,11 +31,11 @@ done
 while true; do
 
 	sleep $time_update
-	
+
 	#check new route
 	for host in $hosts; do
 		nroute["$host"]="$(route -6 -n | grep "2001:db8:3c4d:"$host"::1")"
-		
+
 		if [ "${route["$host"]}" != "${nroute["$host"]}" ]; then
 			#new route
 			if [ -z "${route["$host"]}" ]; then
@@ -39,7 +50,7 @@ while true; do
 				echo "updated route:"
 				echo "${route["$host"]}"
 				echo "${nroute["$host"]}"
-		
+
 			fi
 			echo ""
 		fi
@@ -50,7 +61,5 @@ while true; do
 	done
 
 	echo "-----UPDATE-----"
-	
+
 done
-
-

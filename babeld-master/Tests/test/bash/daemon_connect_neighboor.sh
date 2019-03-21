@@ -19,8 +19,6 @@ filterResult()
         fi
       fi
     done
-
-
 }
 stopBabel(){
   pkill babeld >/dev/null 2>&1

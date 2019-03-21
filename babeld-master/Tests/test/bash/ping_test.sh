@@ -1,6 +1,18 @@
 #!/bin/bash
+if [ -z "$1" ]; then
+	echo "Usage : ./route.sh <nb_host>"
+	exit 1
+fi
 
-hosts="1 2 3 4 5 6 7"
+var=$1
+let $var 2>/dev/null
+ret=$?
+if [[ $ret -eq 1 ]]; then
+	echo "arg must be unsigned Integer"
+	exit 1
+fi
+#variables
+hosts=$(seq 1 $var)
 failed=0
 
 for host in $hosts; do
