@@ -14,7 +14,8 @@ To install it, follow this [link](https://gitlab.com/v-a/nemu/wikis/tuto/install
 ### Setting up Nemu environment
 
 To set an environment with Nemu, you need an image of Linux distributions (more help [here](https://gitlab.com/v-a/nemu/wikis/tuto/fs/debian)).
-After that, you need to create a script which specify the number of hosts and the connection between them. You can a complete documention on this [link](https://gitlab.com/v-a/nemu/wikis/doc/basics).
+
+After that, you need to create a script which specify the number of hosts and the connection between them. You can find a complete documention on this [link](https://gitlab.com/v-a/nemu/wikis/doc/basics).
 You can generate a script which all virtual machine can communicate with wireless link.
 
 	./generate_all_join.sh /path/of/image session_name 5
@@ -44,7 +45,7 @@ To uninstall
 
 ## Usage
 
-To run the protocol, use the `babeld` command wuth the set of interfaces that it should consider
+To run the protocol, use the `babeld` command with the set of interfaces that it should consider
 
 	babeld eth0 eth1
 

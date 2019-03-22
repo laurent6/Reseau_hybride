@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#configuration  interffaces
+#configuration interffaces
 until [[ ${number_host} =~ ^[0-9]+$ ]]; do
-echo " What is the host's number ?"
+echo "What is the host's number ?"
 read number_host
 done
 
@@ -13,13 +13,13 @@ then
 	iface ens3 inet6 static
         	address 2001:db8:3c4d:$number_host::1
         	netmask 64 " >> /etc/network/interfaces
-	echo -ne "restart network ... "
+	echo -ne "restart network ..."
 	service networking restart
-	echo " Done "
+	echo "Done"
 else
 	cat /etc/network/interfaces | grep "2001:db8:3c4d:$number_host::1" >>/dev/null
 	if [ $? == 1 ]; then
-		(>&2 echo "Error : another configuration found please del this configuration and  restart this installation")
+		(>&2 echo "Error : another configuration found please del this configuration and restart this installation")
 		exit 1
 	fi
 
@@ -29,13 +29,13 @@ fi
 grep -v "cdrom" /etc/apt/sources.list > /etc/apt/sources.list.tmp
 mv -f /etc/apt/sources.list.tmp /etc/apt/sources.list
 
-# compile  our protocol
+# compile our protocol
 tmp_path=$(pwd)
 echo -ne "Compile babel protocol ... " 
 cd  ../babeld-master && make >/dev/null
 cd test_unit && make >/dev/null
 cd $tmp_path
-echo " Done"
+echo "Done"
 
 #update
 #apt update -y
