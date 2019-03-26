@@ -10,11 +10,11 @@ import route
 process=0
 
 def startB(interface, opt):
-    print("Start Babeld protocol", end='')
+    print("Start Babeld protocol ... ", end='')
     os.chdir("../../")
-    if subprocess.call("ps -a |grep 'babeld' > /dev/null", shell=True) == 1:
+    if subprocess.call("ps -a |grep 'babeld' > /dev/null", shell=True) == 0:
             stopB(interface)
-    command = "./babeld " + interface +""+ opt +"> /dev/null 2>&1"
+    command = "./babeld " + interface
     process = subprocess.Popen(command, shell=True,  stderr=None, stdout=None)
     print(" Done !")
 
@@ -22,15 +22,19 @@ def startB(interface, opt):
 
 def stopB(interface):
     print("Stop babeld protocol ... ", end='')
-    os.system("pkill babeld > /dev/null 2>&1")
+    os.system("pkill -9 babeld > /dev/null 2>&1")
+    os.system(" rm -f /var/run/babeld.pid > /dev/null 2>&1 ")
+    cmd = "ifdown "+ interface
+    os.system(cmd)
+    cmd = "ifup "+ interface
+    os.system(cmd)
     print("Done ! ")
 
 
 def test_downBattery():
     print("\033[1m " +"TEST BATTERY CRITERIA".center(80) + "\033[0m")
-    print(" \t Make sure that host5's battery is over than 15% and all host are up with -b option")
+    print(" \t Make sure that host5's battery is over than 15% and all host are up with '-b' option")
     input("Press Enter to continue... ")
-    stopB("ens3")
     startB("ens3", "-b")
     print("Checking all routes ... ", end='')
     start_time = time.time()
@@ -69,5 +73,5 @@ def test_downBattery():
             print("Failed")
             exit(1)
 
-    print("Everything is ok")
+    print("\x1b[0;32;40m Everything is ok \x1b[0m")
     stopB("ens3")
