@@ -1,5 +1,6 @@
 import os
 import re
+import statistics
 
 file_data = os.popen("ls perf_*_host").read()
 file_data = file_data.split()
@@ -10,7 +11,7 @@ all_data = dict()
 for f in file_data:
 
     nb_host = int(re.findall(r'\d+', f).pop())
-    
+
     output = os.popen("cat " + f).read().split("\n")
 
     data=list()
@@ -28,7 +29,7 @@ for f in file_data:
                 average+=float(d[0])
 
     average=average/len(data)
-    all_data[nb_host] = [average, min(data), max(data)]
+    all_data[nb_host] = [average, statistics.stdev(data)]
 
 
 f = open("data.txt","w+")
@@ -38,7 +39,3 @@ for e in all_data.keys():
 f.close()
 
 os.system("gnuplot -c gnuplot_script")
-        
-    
-
-    
