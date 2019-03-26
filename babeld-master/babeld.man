@@ -159,6 +159,7 @@ empty string.  The default is
 .TP
 .BI \-b
 Use battery as a criteria
+.TP
 .BI \-e
 Use delay as a criteria
 .TP
