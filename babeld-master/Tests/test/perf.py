@@ -11,7 +11,7 @@ def startPerf(nb_time,hosts, interface):
     print("\t Please,  "
           "\n\t\t 1) Start {PATH_To_Babel}/Tests/test/bash/"
           "daemon_connect_neighboor.sh in all Host"
-          "\n\t\t 2) Start mobilizer in Nemu prompt  ")
+          "\n\t\t 2) Start mobilizer in Nemu prompt  ( StartMobNemu('perfMob')) ")
     input("Press Enter to continue ... ")
     time_mobilizer = time.time()
     if subprocess.call("ps -a |grep 'babeld' >/dev/null", shell=True) == 1:
