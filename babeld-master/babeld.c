@@ -54,7 +54,7 @@ THE SOFTWARE.
 #include "local.h"
 #include "rule.h"
 #include "version.h"
-
+#include "criteria.h"
 struct timeval now;
 
 unsigned char myid[8];
@@ -62,6 +62,7 @@ int have_id = 0;
 int debug = 0;
 
 int use_battery = 0;
+int use_delay =0;
 int link_detect = 0;
 int all_wireless = 0;
 int has_ipv6_subtrees = 0;
@@ -173,7 +174,7 @@ main(int argc, char **argv)
 
     while(1) {
         opt = getopt(argc, argv,
-                     "m:p:h:H:i:k:A:srS:d:g:G:lwz:M:t:T:c:C:DL:I:V:b");
+                     "m:p:h:H:i:k:A:srS:d:g:G:lwz:M:t:T:c:C:DL:I:V:b:e");
         if(opt < 0)
             break;
 
@@ -321,6 +322,11 @@ main(int argc, char **argv)
         /* Battery option */
         case 'b':
             use_battery = 1;
+            break;
+        /* Delay option */
+        case 'e':
+            use_delay = 1;
+            start_serv();
             break;
         default:
             goto usage;
@@ -794,6 +800,11 @@ main(int argc, char **argv)
             if(neigh->buf.timeout.tv_sec != 0) {
                 if(timeval_compare(&now, &neigh->buf.timeout) >= 0) {
                     flushbuf(&neigh->buf);
+                }
+                if(use_delay){
+                  if(difftime(now.tv_sec,neigh->last_delay_time.tv_sec) > 30){
+                    update_delay_neighbour_criteria(neigh);
+                  }
                 }
             }
         }

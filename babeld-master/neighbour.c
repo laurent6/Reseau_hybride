@@ -26,6 +26,7 @@ THE SOFTWARE.
 #include <sys/time.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <time.h>
 #include <assert.h>
 
@@ -38,7 +39,8 @@ THE SOFTWARE.
 #include "message.h"
 #include "resend.h"
 #include "local.h"
-
+#include "criteria.h"
+#include "kernel.h"
 struct neighbour *neighs = NULL;
 /*******CAHNGE **************/
 /*
@@ -54,7 +56,7 @@ void disable_metric_critical(struct  neighbour *neigh){
 }
 
 int is_neighboor_critical(struct  neighbour *neigh){
-  return neigh->add_metric_critical >0; 
+  return neigh->add_metric_critical >0;
 }
 
 
@@ -119,6 +121,7 @@ find_neighbour(const unsigned char *address, struct interface *ifp)
 
     neigh->hello.seqno = neigh->uhello.seqno = -1;
     memcpy(neigh->address, address, 16);
+
     neigh->txcost = INFINITY;
     neigh->ihu_time = now;
     neigh->hello.time = neigh->uhello.time = zero;
@@ -129,11 +132,21 @@ find_neighbour(const unsigned char *address, struct interface *ifp)
     neigh->buf.size = ifp->buf.size;
     neigh->buf.flush_interval = ifp->buf.flush_interval;
     neigh->buf.sin6.sin6_family = AF_INET6;
-    memcpy(&neigh->buf.sin6.sin6_addr, address, 16);
+    //memcpy(&neigh->buf.sin6.sin6_addr, address, 16);
+    if((inet_pton(AF_INET6, format_address(address), &neigh->buf.sin6.sin6_addr)) !=1){
+      perror("should'nt this Happened ");
+      exit(1);
+    }
     neigh->buf.sin6.sin6_port = htons(protocol_port);
     neigh->buf.sin6.sin6_scope_id = ifp->ifindex;
     neigh->next = neighs;
     neighs = neigh;
+    neigh->delay = 0;
+    if (use_delay){
+      update_delay_neighbour_criteria(neigh);
+      debugf("Delay  of %s = %u \n", format_address(address),neigh->delay);
+neighs = neigh;
+    }
     local_notify_neighbour(neigh, LOCAL_ADD);
     return neigh;
 }

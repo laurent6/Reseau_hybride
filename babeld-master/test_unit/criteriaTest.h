@@ -51,6 +51,7 @@ unsigned char myid[8];
 int have_id = 0;
 int debug = 0;
 extern int use_battery;
+extern int use_delay;
 int link_detect = 0;
 int all_wireless = 0;
 int has_ipv6_subtrees = 0;
@@ -85,5 +86,3 @@ static volatile sig_atomic_t exiting = 0, dumping = 0, reopening = 0;
 void schedule_neighbours_check(int msecs, int override);
 void schedule_interfaces_check(int msecs, int override);
 int resize_receive_buffer(int size);
-
-

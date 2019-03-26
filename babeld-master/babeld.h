@@ -93,7 +93,7 @@ extern int link_detect;
 extern int all_wireless;
 extern int has_ipv6_subtrees;
 extern int use_battery;
-
+extern int use_delay;
 extern unsigned char myid[8];
 extern int have_id;
 

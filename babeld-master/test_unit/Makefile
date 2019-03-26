@@ -7,15 +7,17 @@ DEFINES = $(PLATFORM_DEFINES)
 
 CFLAGS = $(CDEBUGFLAGS) $(DEFINES) $(EXTRA_DEFINES)
 
-LDLIBS = -lrt
+LDLIBS = -lrt -pthread
 
 SRCS =  criteriaTest.c ../net.c ../kernel.c ../util.c ../interface.c ../source.c ../neighbour.c \
        ../route.c ../xroute.c ../message.c ../resend.c ../configuration.c ../local.c \
-       ../disambiguation.c ../rule.c ../criteria.c
+       ../disambiguation.c ../rule.c ../criteria.c ../server_delay.c \
+			 ../client_delay.c
 
 OBJS =  criteriaTest.o  ../net.o ../kernel.o ../util.o ../interface.o ../source.o ../neighbour.o \
        ../route.o ../xroute.o ../message.o ../resend.o ../configuration.o ../local.o \
-       ../disambiguation.o ../rule.o ../criteria.o
+       ../disambiguation.o ../rule.o ../criteria.o ../server_delay.o \
+			 ../client_delay.o
 
 
 test: $(OBJS)

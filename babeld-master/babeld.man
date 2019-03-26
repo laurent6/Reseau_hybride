@@ -159,6 +159,8 @@ empty string.  The default is
 .TP
 .BI \-b
 Use battery as a criteria
+.BI \-e
+Use delay as a criteria
 .TP
 .IR interface ...
 The list of interfaces on which the protocol should operate.
@@ -452,7 +454,7 @@ The default is
 if the interface is of type
 .B tunnel,
 and
-.BR 0 
+.BR 0
 otherwise.
 .SS Filtering rules
 A filtering rule is defined by a single line with the following format:

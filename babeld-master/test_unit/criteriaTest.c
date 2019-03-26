@@ -58,6 +58,7 @@ THE SOFTWARE.
 #include "../criteria.h"
 
 int use_battery=0;
+int use_delay=0;
 void testBattery(){
 
   //set battery

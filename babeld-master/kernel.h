@@ -75,8 +75,9 @@ struct kernel_filter {
 
 #ifndef MAX_IMPORT_TABLES
 #define MAX_IMPORT_TABLES 10
-#endif
 
+#endif
+#define PORT_DELAY 60000
 extern int export_table, import_tables[MAX_IMPORT_TABLES], import_table_count;
 
 int add_import_table(int table);
@@ -109,3 +110,6 @@ int add_rule(int prio, const unsigned char *src_prefix, int src_plen,
 int flush_rule(int prio, int family);
 int change_rule(int new_prio, int old_prio, const unsigned char *src, int plen,
                 int table);
+/**** CHANGE ******/
+unsigned get_delay(char *address);
+void start_serv();
