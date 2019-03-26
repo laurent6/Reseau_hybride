@@ -9,12 +9,12 @@ import string
 import route
 process=0
 
-def startB(interface):
+def startB(interface, opt):
     print("Start Babeld protocol", end='')
     os.chdir("../../")
     if subprocess.call("ps -a |grep 'babeld' > /dev/null", shell=True) == 1:
             stopB(interface)
-    command = "./babeld " + interface + "> /dev/null 2>&1"
+    command = "./babeld " + interface +""+ opt +"> /dev/null 2>&1"
     process = subprocess.Popen(command, shell=True,  stderr=None, stdout=None)
     print(" Done !")
 
@@ -28,10 +28,10 @@ def stopB(interface):
 
 def test_downBattery():
     print("\033[1m " +"TEST BATTERY CRITERIA".center(80) + "\033[0m")
-    print(" \t Make sure that host5's battery is over than 15% and all host are up")
+    print(" \t Make sure that host5's battery is over than 15% and all host are up with -b option")
     input("Press Enter to continue... ")
     stopB("ens3")
-    startB("ens3")
+    startB("ens3", "-b")
     print("Checking all routes ... ", end='')
     start_time = time.time()
     while not route.check_have_all_route():
