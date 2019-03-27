@@ -30,7 +30,7 @@ You can automatise the configuration of IP address, build and installation on ho
 
 To build the protocol
 
-	cd babeld
+	cd babeld-master
 	make
 
 
