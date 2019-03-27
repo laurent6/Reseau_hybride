@@ -48,7 +48,7 @@ To uninstall
 
 To run the protocol, use the `babeld` command with the set of interfaces that it should consider
 
-	babeld eth0 eth1
+	 {PATH_TO_PROJECT}/babeld-master/babeld <interface>
 
 
 You can specify option, all option is specified in [man](babeld-master/babeld.man)
