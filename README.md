@@ -66,6 +66,8 @@ You can run the different tests in the directory [test](babeld-master/Tests/test
 > To Performance test  with -p option, use  nemu -f init_all_join.py -i ( init_all_join.py is the script generate by generate_all_join.sh ) 
 
 --
-Laurent BOUQUIN 
-Julien  MASSONNEAU
-Virgile CHATELAIN
+<ul>
+<li> Laurent BOUQUIN </li> 
+<li> Julien  MASSONNEAU </li>
+<li> Virgile CHATELAIN </li>
+</ul>
