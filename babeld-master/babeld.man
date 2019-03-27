@@ -710,3 +710,6 @@ enough to just allow packets destined to Babel's multicast address.
 .BR ahcpd (8).
 .SH AUTHOR
 Juliusz Chroboczek.
+Laurent BOUQUIN.
+Virgile CHATELAIN.
+Julien  MASSONNEAU.

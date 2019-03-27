@@ -1,3 +1,10 @@
+/**
+   Authors : 
+   Laurent BOUQUIN
+   Virgile CHATELAIN
+   Julien  MASSONNEAU
+ **/
+
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 /* nothing */
 #elif defined(__GNUC__)
@@ -11,7 +18,6 @@
 #define inline /**/
 #define restrict /**/
 #endif
-
 #if defined(__GNUC__) && (__GNUC__ >= 3)
 #define ATTRIBUTE(x) __attribute__ (x)
 #define LIKELY(_x) __builtin_expect(!!(_x), 1)
@@ -21,18 +27,15 @@
 #define LIKELY(_x) !!(_x)
 #define UNLIKELY(_x) !!(_x)
 #endif
-
 #if defined(__GNUC__) && (__GNUC__ >= 4) && (__GNUC_MINOR__ >= 3)
 #define COLD __attribute__ ((cold))
 #else
 #define COLD /**/
 #endif
-
 #ifndef IF_NAMESIZE
 #include <sys/socket.h>
 #include <net/if.h>
 #endif
-
 #ifdef HAVE_VALGRIND
 #include <valgrind/memcheck.h>
 #else
@@ -43,8 +46,6 @@
 #define VALGRIND_CHECK_MEM_IS_DEFINED(a, b) do {} while(0)
 #endif
 #endif
-
-
 struct timeval now;
 
 unsigned char myid[8];
@@ -62,16 +63,17 @@ int random_id = 0;
 int do_daemonise = 0;
 int skip_kernel_setup = 0;
 const char *logfile = NULL,
-    *pidfile = "/var/run/babeld.pid",
-    *state_file = "/var/lib/babel-state";
+  *pidfile = "/var/run/babeld.pid", *state_file = "/var/lib/babel-state";
 
 unsigned char *receive_buffer = NULL;
 int receive_buffer_size = 0;
 
-const unsigned char zeroes[16] = {0};
+const unsigned char zeroes[16] = { 0 };
+
 const unsigned char ones[16] =
-    {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+  { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+  0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+};
 
 int protocol_port;
 unsigned char protocol_group[16];
@@ -83,6 +85,6 @@ struct timeval check_neighbours_timeout, check_interfaces_timeout;
 static volatile sig_atomic_t exiting = 0, dumping = 0, reopening = 0;
 
 
-void schedule_neighbours_check(int msecs, int override);
-void schedule_interfaces_check(int msecs, int override);
-int resize_receive_buffer(int size);
+void schedule_neighbours_check (int msecs, int override);
+void schedule_interfaces_check (int msecs, int override);
+int resize_receive_buffer (int size);

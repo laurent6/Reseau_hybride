@@ -1,3 +1,9 @@
+/**
+   Authors : 
+   Laurent BOUQUIN
+   Virgile CHATELAIN
+   Julien  MASSONNEAU
+ **/
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>

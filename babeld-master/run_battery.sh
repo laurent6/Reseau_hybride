@@ -1,6 +1,14 @@
 #!/bin/bash
+#Authors
+#   Laurent BOUQUIN
+#   Virgile CHATELAIN
+#   Julien  MASSONNEAU
+if [ -z "$1" ]; then
+    echo "Usage : ./battery.sh <interface> [% of battery]"
+    exit 1
+fi
 
-echo "Usage : ./battery.sh <interface> [% of battery]"
+
 
 # time interval for battery update
 time=5
