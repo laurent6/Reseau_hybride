@@ -1,3 +1,4 @@
+
 # Reseau_Hybride
 
 Hybrid routing protocol for wireless mesh network based on [babeld protocol](https://github.com/jech/babeld).
@@ -22,7 +23,7 @@ You can generate a script which all virtual machine can communicate with wireles
 	
 ### Setting hosts
 
-You can automatise the configuration of IP address on hosts with [`install.sh`](Wireless_env/install.sh)
+You can automatise the configuration of IP address and Build and installation on hosts with [`install.sh`](Wireless_env/install.sh)
 
 
 ## Build and installation
