@@ -61,12 +61,13 @@ You can specify option, all option is specified in [man](babeld-master/babeld.ma
 ### Architecture 
 
 <em> ```initialisation_wireless.py``` </em>
-![Alt text](archi_test.png?raw=true "Architecture test")
+
+[image](archi_test.png?raw=true "Architecture test")
 
 
 <em> ```init_all_join.py```
 
-![Alt text](new_archi.png?raw=true "Architecture performance test ")
+[image](new_archi.png?raw=true "Architecture performance test ")
 
 ### running tests
 
