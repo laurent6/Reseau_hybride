@@ -34,7 +34,7 @@ for f in file_data:
 
 f = open("data.txt","w+")
 for e in all_data.keys():
-    string = str(e) + "\t" + str(all_data[e][0]) + "\t" + str(all_data[e][1]) + "\t" + str(all_data[e][2]) + "\n"
+    string = str(e) + "\t" + str(all_data[e][0]) + "\t" + str(all_data[e][1]) +  "\n"
     f.write(string)
 f.close()
 

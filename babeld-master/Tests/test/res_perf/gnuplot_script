@@ -3,5 +3,5 @@ set xlabel 'Number of hosts'
 set ylabel 'Time (s)'
 set term png
 set output "res_perf.png"
-set xrange[1:12] 
-plot "data.txt" using 1:2:3:4 with yerrorbars
+set xrange[1:12]
+plot "data.txt" using 1:2:3 with yerrorbars
