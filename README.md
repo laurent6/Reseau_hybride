@@ -52,11 +52,11 @@ To run the protocol, use the `babeld` command with the set of interfaces that it
 
 You can specify option, all option is specified in [man](babeld-master/babeld.man)
 
-	man babeld
+	man {PATH_TO_PROJECT}/babeld-master/babeld.man
 
 
 ## Running the tests
 
 You can run the different tests in the directory [test](babeld-master/Tests/test)
 
-	python3 main.py -h
+	python3 {PATH_TO_PROJECT}/babeld-master/Tests/test/main.py -h
