@@ -61,3 +61,6 @@ You can specify option, all option is specified in [man](babeld-master/babeld.ma
 You can run the different tests in the directory [test](babeld-master/Tests/test)
 
 	python3 {PATH_TO_PROJECT}/babeld-master/Tests/test/main.py -h
+
+> To test battery criteria with  -b option, use  nemu -f  initialisation_wireless.py -i  
+> To Performance test  with -p option, use  nemu -f init_all_join.py -i 
