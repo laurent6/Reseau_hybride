@@ -62,12 +62,12 @@ You can specify option, all option is specified in [man](babeld-master/babeld.ma
 
 <em> ```initialisation_wireless.py``` </em>
 
-[image](archi_test.png?raw=true "Architecture test")
+![image](archi_test.png?raw=true "Architecture test")
 
 
 <em> ```init_all_join.py```
 
-[image](new_archi.png?raw=true "Architecture performance test ")
+![image](new_archi.png?raw=true "Architecture performance test ")
 
 ### running tests
 
