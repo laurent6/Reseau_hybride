@@ -65,7 +65,8 @@ You can run the different tests in the directory [test](babeld-master/Tests/test
 > To test battery criteria with  -b option, use  nemu -f  initialisation_wireless.py -i ( don't forget change path_sys and session_name in this script )   
 > To Performance test  with -p option, use  nemu -f init_all_join.py -i ( init_all_join.py is the script generate by generate_all_join.sh ) 
 
---
+
+<h3>  Authors  </h3>
 <ul>
 <li> Laurent BOUQUIN </li> 
 <li> Julien  MASSONNEAU </li>
