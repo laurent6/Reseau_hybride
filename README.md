@@ -19,7 +19,7 @@ To set an environment with Nemu, you need an image of Linux distributions (more 
 After that, you need to create a script which specify the number of hosts and the connection between them. You can find a complete documention on this [link](https://gitlab.com/v-a/nemu/wikis/doc/basics).
 You can generate a script which all virtual machine can communicate with wireless link.
 
-	./['generate_all_join.sh'](Wireless_env/generate_all_join.sh) </path/of/image> <session_name> <nb_host>
+	./[`generate_all_join.sh`](Wireless_env/generate_all_join.sh) </path/of/image> <session_name> <nb_host>
 	
 ### Setting hosts
 
