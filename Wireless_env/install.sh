@@ -9,7 +9,7 @@ done
 cat /etc/network/interfaces | grep "ens3" >>/dev/null
 if [ $? == 1 ]
 then
-	echo "auto ens3 
+	echo "auto ens3
 	iface ens3 inet6 static
         	address 2001:db8:3c4d:$number_host::1
         	netmask 64 " >> /etc/network/interfaces
@@ -31,8 +31,9 @@ mv -f /etc/apt/sources.list.tmp /etc/apt/sources.list
 
 # compile our protocol
 tmp_path=$(pwd)
-echo -ne "Compile babel protocol ... " 
+echo -ne "Compile babel protocol ... "
 cd  ../babeld-master && make >/dev/null
+make install >/dev/null
 cd test_unit && make >/dev/null
 cd $tmp_path
 echo "Done"
@@ -41,4 +42,3 @@ echo "Done"
 #apt update -y
 #install killall usefull to test protocol
 #apt-get install psmisc -y
-

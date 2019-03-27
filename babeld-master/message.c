@@ -19,7 +19,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-CHANGE BY 
+CHANGE BY
 
    Laurent BOUQUIN
    Virgile CHATELAIN
@@ -1228,11 +1228,11 @@ send_hello_noihu (struct interface *ifp, unsigned interval)
     }
   end_message (&ifp->buf, MESSAGE_HELLO, ifp->buf.enable_timestamps ? 12 : 6);
     /**** CHANGE ********/
-
-  start_message (&ifp->buf, MESSAGE_CRITERIA, LENGTH_ALL_CRITERIA);
+		/** first version to  baterie criteria **/ 
+  /*start_message (&ifp->buf, MESSAGE_CRITERIA, LENGTH_ALL_CRITERIA);
   debugf (" Send Hello criteria \n");
   push_criteria (&ifp->buf);
-  end_message (&ifp->buf, MESSAGE_CRITERIA, LENGTH_ALL_CRITERIA);
+  end_message (&ifp->buf, MESSAGE_CRITERIA, LENGTH_ALL_CRITERIA);*/
 
 }
 
