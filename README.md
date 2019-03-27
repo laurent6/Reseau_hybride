@@ -65,7 +65,7 @@ You can specify option, all option is specified in [man](babeld-master/babeld.ma
 ![image](archi_test.png?raw=true "Architecture test")
 
 
-<em> ```init_all_join.py``` <em>
+<em> ```init_all_join.py``` </em>
 
 ![image](new_archi.png?raw=true "Architecture performance test ")
 
