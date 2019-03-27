@@ -14,7 +14,7 @@ def startB(interface, opt):
     os.chdir("../../")
     if subprocess.call("ps -a |grep 'babeld' > /dev/null", shell=True) == 0:
             stopB(interface)
-    command = "./babeld " + interface
+    command = "./babeld > /dev/null " + interface
     process = subprocess.Popen(command, shell=True,  stderr=None, stdout=None)
     print(" Done !")
 
