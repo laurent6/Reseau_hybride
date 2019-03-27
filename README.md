@@ -69,7 +69,7 @@ You can specify option, all option is specified in [man](babeld-master/babeld.ma
 
 ![image](new_archi.png?raw=true "Architecture performance test ")
 
-### running tests
+### Running tests
 
 You can run the different tests in the directory [test](babeld-master/Tests/test)
 
