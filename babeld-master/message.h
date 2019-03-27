@@ -39,9 +39,9 @@ THE SOFTWARE.
 /* Protocol extension through sub-TLVs. */
 #define SUBTLV_PAD1 0
 #define SUBTLV_PADN 1
-#define SUBTLV_DIVERSITY 2       /* Also known as babelz. */
-#define SUBTLV_TIMESTAMP 3       /* Used to compute RTT. */
-#define SUBTLV_SOURCE_PREFIX 128 /* Source-specific routing. */
+#define SUBTLV_DIVERSITY 2	/* Also known as babelz. */
+#define SUBTLV_TIMESTAMP 3	/* Used to compute RTT. */
+#define SUBTLV_SOURCE_PREFIX 128	/* Source-specific routing. */
 
 extern unsigned short myseqno;
 extern struct timeval seqno_time;
@@ -51,54 +51,56 @@ extern int split_horizon;
 
 extern unsigned char packet_header[4];
 
-void parse_packet(const unsigned char *from, struct interface *ifp,
-                  const unsigned char *packet, int packetlen);
-void flushbuf(struct buffered *buf);
-void flushupdates(struct interface *ifp);
-void send_ack(struct neighbour *neigh, unsigned short nonce,
-              unsigned short interval);
-void send_hello_noihu(struct interface *ifp, unsigned interval);
-void send_hello(struct interface *ifp);
-void flush_unicast(int dofree);
-void send_update(struct interface *ifp, int urgent,
-                 const unsigned char *prefix, unsigned char plen,
-                 const unsigned char *src_prefix, unsigned char src_plen);
-void send_update_resend(struct interface *ifp,
-                        const unsigned char *prefix, unsigned char plen,
-                        const unsigned char *src_prefix,
-                        unsigned char src_plen);
-void send_wildcard_retraction(struct interface *ifp);
-void update_myseqno(void);
-void send_self_update(struct interface *ifp);
-void send_ihu(struct neighbour *neigh, struct interface *ifp);
-void send_marginal_ihu(struct interface *ifp);
-void send_multicast_request(struct interface *ifp,
-                  const unsigned char *prefix, unsigned char plen,
-                  const unsigned char *src_prefix, unsigned char src_plen);
-void send_unicast_request(struct neighbour *neigh,
-                          const unsigned char *prefix, unsigned char plen,
-                          const unsigned char *src_prefix,
-                          unsigned char src_plen);
-void
-send_multicast_multihop_request(struct interface *ifp,
-                                const unsigned char *prefix, unsigned char plen,
-                                const unsigned char *src_prefix,
-                                unsigned char src_plen,
-                                unsigned short seqno, const unsigned char *id,
-                                unsigned short hop_count);
-void
-send_unicast_multihop_request(struct neighbour *neigh,
-                              const unsigned char *prefix, unsigned char plen,
-                              const unsigned char *src_prefix,
-                              unsigned char src_plen,
-                              unsigned short seqno, const unsigned char *id,
-                              unsigned short hop_count);
-void send_request_resend(const unsigned char *prefix, unsigned char plen,
-                         const unsigned char *src_prefix,
-                         unsigned char src_plen,
-                         unsigned short seqno, unsigned char *id);
-void handle_request(struct neighbour *neigh, const unsigned char *prefix,
-                    unsigned char plen,
-                    const unsigned char *src_prefix, unsigned char src_plen,
-                    unsigned char hop_count,
-                    unsigned short seqno, const unsigned char *id);
+void parse_packet (const unsigned char *from, struct interface *ifp,
+		   const unsigned char *packet, int packetlen);
+void flushbuf (struct buffered *buf);
+void flushupdates (struct interface *ifp);
+void send_ack (struct neighbour *neigh, unsigned short nonce,
+	       unsigned short interval);
+void send_hello_noihu (struct interface *ifp, unsigned interval);
+void send_hello (struct interface *ifp);
+void flush_unicast (int dofree);
+void send_update (struct interface *ifp, int urgent,
+		  const unsigned char *prefix, unsigned char plen,
+		  const unsigned char *src_prefix, unsigned char src_plen);
+void send_update_resend (struct interface *ifp,
+			 const unsigned char *prefix, unsigned char plen,
+			 const unsigned char *src_prefix,
+			 unsigned char src_plen);
+void send_wildcard_retraction (struct interface *ifp);
+void update_myseqno (void);
+void send_self_update (struct interface *ifp);
+void send_ihu (struct neighbour *neigh, struct interface *ifp);
+void send_marginal_ihu (struct interface *ifp);
+void send_multicast_request (struct interface *ifp,
+			     const unsigned char *prefix, unsigned char plen,
+			     const unsigned char *src_prefix,
+			     unsigned char src_plen);
+void send_unicast_request (struct neighbour *neigh,
+			   const unsigned char *prefix, unsigned char plen,
+			   const unsigned char *src_prefix,
+			   unsigned char src_plen);
+void send_multicast_multihop_request (struct interface *ifp,
+				      const unsigned char *prefix,
+				      unsigned char plen,
+				      const unsigned char *src_prefix,
+				      unsigned char src_plen,
+				      unsigned short seqno,
+				      const unsigned char *id,
+				      unsigned short hop_count);
+void send_unicast_multihop_request (struct neighbour *neigh,
+				    const unsigned char *prefix,
+				    unsigned char plen,
+				    const unsigned char *src_prefix,
+				    unsigned char src_plen,
+				    unsigned short seqno,
+				    const unsigned char *id,
+				    unsigned short hop_count);
+void send_request_resend (const unsigned char *prefix, unsigned char plen,
+			  const unsigned char *src_prefix,
+			  unsigned char src_plen, unsigned short seqno,
+			  unsigned char *id);
+void handle_request (struct neighbour *neigh, const unsigned char *prefix,
+		     unsigned char plen, const unsigned char *src_prefix,
+		     unsigned char src_plen, unsigned char hop_count,
+		     unsigned short seqno, const unsigned char *id);

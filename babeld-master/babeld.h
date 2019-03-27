@@ -47,7 +47,6 @@ THE SOFTWARE.
 #define inline /**/
 #define restrict /**/
 #endif
-
 #if defined(__GNUC__) && (__GNUC__ >= 3)
 #define ATTRIBUTE(x) __attribute__ (x)
 #define LIKELY(_x) __builtin_expect(!!(_x), 1)
@@ -57,18 +56,15 @@ THE SOFTWARE.
 #define LIKELY(_x) !!(_x)
 #define UNLIKELY(_x) !!(_x)
 #endif
-
 #if defined(__GNUC__) && (__GNUC__ >= 4) && (__GNUC_MINOR__ >= 3)
 #define COLD __attribute__ ((cold))
 #else
 #define COLD /**/
 #endif
-
 #ifndef IF_NAMESIZE
 #include <sys/socket.h>
 #include <net/if.h>
 #endif
-
 #ifdef HAVE_VALGRIND
 #include <valgrind/memcheck.h>
 #else
@@ -79,7 +75,6 @@ THE SOFTWARE.
 #define VALGRIND_CHECK_MEM_IS_DEFINED(a, b) do {} while(0)
 #endif
 #endif
-
 extern struct timeval now;
 extern int debug;
 extern time_t reboot_time;
@@ -107,7 +102,7 @@ extern int protocol_socket;
 extern int kernel_socket;
 extern int max_request_hopcount;
 
-void schedule_neighbours_check(int msecs, int override);
-void schedule_interfaces_check(int msecs, int override);
-int resize_receive_buffer(int size);
-int reopen_logfile(void);
+void schedule_neighbours_check (int msecs, int override);
+void schedule_interfaces_check (int msecs, int override);
+int resize_receive_buffer (int size);
+int reopen_logfile (void);

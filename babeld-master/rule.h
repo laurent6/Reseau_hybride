@@ -22,12 +22,12 @@ THE SOFTWARE.
 
 #define SRC_TABLE_NUM 10
 
-extern int src_table_idx; /* number of the first table */
-extern int src_table_prio; /* first prio range */
+extern int src_table_idx;	/* number of the first table */
+extern int src_table_prio;	/* first prio range */
 
 /* Return the number of the table using src_plen, allocate the table in the
    kernel if necessary. */
-int find_table(const unsigned char *dest, unsigned short plen,
-               const unsigned char *src, unsigned short src_plen);
-void release_tables(void);
-int check_rules(void);
+int find_table (const unsigned char *dest, unsigned short plen,
+		const unsigned char *src, unsigned short src_plen);
+void release_tables (void);
+int check_rules (void);

@@ -9,8 +9,9 @@
 
 
 
-void push_criteria(struct buffered *buf);
-void update_metric_battery_criteria(int * metric);
-int is_battery_critical(int b);
-void update_delay_neighbour_criteria(struct neighbour *neigh);
-void update_metric_delay_criteria(short unsigned int *metric, struct neighbour *neigh);
+void push_criteria (struct buffered *buf);
+void update_metric_battery_criteria (int *metric);
+int is_battery_critical (int b);
+void update_delay_neighbour_criteria (struct neighbour *neigh);
+void update_metric_delay_criteria (short unsigned int *metric,
+				   struct neighbour *neigh);

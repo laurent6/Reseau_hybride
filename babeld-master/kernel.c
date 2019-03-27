@@ -36,94 +36,103 @@ THE SOFTWARE.
 /* Like gettimeofday, but returns monotonic time.  If POSIX clocks are not
    available, falls back to gettimeofday but enforces monotonicity. */
 int
-gettime(struct timeval *tv)
+gettime (struct timeval *tv)
 {
-    int rc;
-    static time_t offset = 0, previous = 0;
+  int rc;
+  static time_t offset = 0, previous = 0;
 
 #if defined(_POSIX_TIMERS) && _POSIX_TIMERS > 0 && defined(CLOCK_MONOTONIC)
-    static int have_posix_clocks = -1;
+  static int have_posix_clocks = -1;
 
-    if(UNLIKELY(have_posix_clocks < 0)) {
-        struct timespec ts;
-        rc = clock_gettime(CLOCK_MONOTONIC, &ts);
-        if(rc < 0) {
-            have_posix_clocks = 0;
-        } else {
-            have_posix_clocks = 1;
-        }
+  if (UNLIKELY (have_posix_clocks < 0))
+    {
+      struct timespec ts;
+      rc = clock_gettime (CLOCK_MONOTONIC, &ts);
+      if (rc < 0)
+	{
+	  have_posix_clocks = 0;
+	}
+      else
+	{
+	  have_posix_clocks = 1;
+	}
     }
 
-    if(have_posix_clocks) {
-        struct timespec ts;
-        int rc;
-        rc = clock_gettime(CLOCK_MONOTONIC, &ts);
-        if(rc < 0)
-            return rc;
-        tv->tv_sec = ts.tv_sec;
-        tv->tv_usec = ts.tv_nsec / 1000;
-        return rc;
+  if (have_posix_clocks)
+    {
+      struct timespec ts;
+      int rc;
+      rc = clock_gettime (CLOCK_MONOTONIC, &ts);
+      if (rc < 0)
+	return rc;
+      tv->tv_sec = ts.tv_sec;
+      tv->tv_usec = ts.tv_nsec / 1000;
+      return rc;
     }
 #endif
 
-    rc = gettimeofday(tv, NULL);
-    if(rc < 0)
-        return rc;
-    tv->tv_sec += offset;
-    if(UNLIKELY(previous > tv->tv_sec)) {
-        offset += previous - tv->tv_sec;
-        tv->tv_sec = previous;
-    }
-    previous = tv->tv_sec;
+  rc = gettimeofday (tv, NULL);
+  if (rc < 0)
     return rc;
+  tv->tv_sec += offset;
+  if (UNLIKELY (previous > tv->tv_sec))
+    {
+      offset += previous - tv->tv_sec;
+      tv->tv_sec = previous;
+    }
+  previous = tv->tv_sec;
+  return rc;
 }
 
 /* If /dev/urandom doesn't exist, this will fail with ENOENT, which the
    caller will deal with gracefully. */
 
 int
-read_random_bytes(void *buf, int len)
+read_random_bytes (void *buf, int len)
 {
-    int fd, rc;
+  int fd, rc;
 
-    fd = open("/dev/urandom", O_RDONLY);
-    if(fd < 0) {
-        errno = ENOSYS;
-        return -1;
+  fd = open ("/dev/urandom", O_RDONLY);
+  if (fd < 0)
+    {
+      errno = ENOSYS;
+      return -1;
     }
 
-    rc = read(fd, buf, len);
-    if(rc < len)
-        rc = -1;
+  rc = read (fd, buf, len);
+  if (rc < len)
+    rc = -1;
 
-    close(fd);
+  close (fd);
 
-    return rc;
+  return rc;
 }
 
 int
-add_import_table(int table)
+add_import_table (int table)
 {
-    if(table < 0 || table > 0xFFFF) return -1;
-    if(import_table_count > MAX_IMPORT_TABLES - 1) return -2;
-    import_tables[import_table_count++] = table;
-    return 0;
+  if (table < 0 || table > 0xFFFF)
+    return -1;
+  if (import_table_count > MAX_IMPORT_TABLES - 1)
+    return -2;
+  import_tables[import_table_count++] = table;
+  return 0;
 }
 
 int
-kernel_older_than(const char *sysname, int version, int sub_version)
+kernel_older_than (const char *sysname, int version, int sub_version)
 {
-    struct utsname un;
-    int rc;
-    int v = 0;
-    int sub_v = 0;
-    rc = uname(&un);
-    if(rc < 0)
-        return -1;
-    if(strcmp(sysname, un.sysname) != 0)
-        return -1;
-    rc = sscanf(un.release, "%d.%d", &v, &sub_v);
-    if(rc < 2)
-        return -1;
-    return (v < version || (v == version && sub_v < sub_version));
+  struct utsname un;
+  int rc;
+  int v = 0;
+  int sub_v = 0;
+  rc = uname (&un);
+  if (rc < 0)
+    return -1;
+  if (strcmp (sysname, un.sysname) != 0)
+    return -1;
+  rc = sscanf (un.release, "%d.%d", &v, &sub_v);
+  if (rc < 2)
+    return -1;
+  return (v < version || (v == version && sub_v < sub_version));
 }

@@ -20,13 +20,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-struct buffered_update {
-    unsigned char id[8];
-    unsigned char prefix[16];
-    unsigned char src_prefix[16];
-    unsigned char plen;
-    unsigned char src_plen;
-    unsigned char pad[2];
+struct buffered_update
+{
+  unsigned char id[8];
+  unsigned char prefix[16];
+  unsigned char src_prefix[16];
+  unsigned char plen;
+  unsigned char src_plen;
+  unsigned char pad[2];
 };
 
 #define IF_TYPE_DEFAULT 0
@@ -36,24 +37,25 @@ struct buffered_update {
 
 /* If you modify this structure, also modify the merge_ifconf function. */
 
-struct interface_conf {
-    char *ifname;
-    unsigned hello_interval;
-    unsigned update_interval;
-    unsigned short cost;
-    char type;
-    char split_horizon;
-    char lq;
-    char faraway;
-    char unicast;
-    int channel;
-    int enable_timestamps;
-    int rfc6126;
-    unsigned int rtt_decay;
-    unsigned int rtt_min;
-    unsigned int rtt_max;
-    unsigned int max_rtt_penalty;
-    struct interface_conf *next;
+struct interface_conf
+{
+  char *ifname;
+  unsigned hello_interval;
+  unsigned update_interval;
+  unsigned short cost;
+  char type;
+  char split_horizon;
+  char lq;
+  char faraway;
+  char unicast;
+  int channel;
+  int enable_timestamps;
+  int rfc6126;
+  unsigned int rtt_decay;
+  unsigned int rtt_min;
+  unsigned int rtt_max;
+  unsigned int max_rtt_penalty;
+  struct interface_conf *next;
 };
 
 #define CONFIG_DEFAULT 0
@@ -61,7 +63,7 @@ struct interface_conf {
 #define CONFIG_YES 2
 
 /* Interface is up. */
-# define IF_UP (1 << 0)
+#define IF_UP (1 << 0)
 /* Interface known to be wireless, unknown otherwise. */
 #define IF_WIRELESS (1<<1)
 /* Apply split horizon. */
@@ -78,55 +80,57 @@ struct interface_conf {
 #define IF_CHANNEL_INTERFERING 255
 #define IF_CHANNEL_NONINTERFERING -2
 
-struct buffered {
-    struct sockaddr_in6 sin6;
-    char *buf;
-    int len;
-    int size;
-    int flush_interval;
-    struct timeval timeout;
-    char enable_timestamps;
-    char rfc6126_compatible;
-    char have_id;
-    char have_nh;
-    char have_prefix;
-    unsigned char id[8];
-    unsigned char nh[4];
-    unsigned char prefix[16];
-    /* Relative position of the Hello message in the send buffer, or
-       (-1) if there is none. */
-    int hello;
+struct buffered
+{
+  struct sockaddr_in6 sin6;
+  char *buf;
+  int len;
+  int size;
+  int flush_interval;
+  struct timeval timeout;
+  char enable_timestamps;
+  char rfc6126_compatible;
+  char have_id;
+  char have_nh;
+  char have_prefix;
+  unsigned char id[8];
+  unsigned char nh[4];
+  unsigned char prefix[16];
+  /* Relative position of the Hello message in the send buffer, or
+     (-1) if there is none. */
+  int hello;
 };
 
-struct interface {
-    struct interface *next;
-    struct interface_conf *conf;
-    unsigned int ifindex;
-    unsigned short flags;
-    unsigned short cost;
-    int channel;
-    struct timeval hello_timeout;
-    struct timeval update_timeout;
-    struct timeval update_flush_timeout;
-    char name[IF_NAMESIZE];
-    unsigned char *ipv4;
-    int numll;
-    unsigned char (*ll)[16];
-    struct buffered buf;
-    struct buffered_update *buffered_updates;
-    int num_buffered_updates;
-    int update_bufsize;
-    time_t last_update_time;
-    unsigned short hello_seqno;
-    unsigned hello_interval;
-    unsigned update_interval;
-    /* A higher value means we forget old RTT samples faster. Must be
-       between 1 and 256, inclusive. */
-    unsigned int rtt_decay;
-    /* Parameters for computing the cost associated to RTT. */
-    unsigned int rtt_min;
-    unsigned int rtt_max;
-    unsigned int max_rtt_penalty;
+struct interface
+{
+  struct interface *next;
+  struct interface_conf *conf;
+  unsigned int ifindex;
+  unsigned short flags;
+  unsigned short cost;
+  int channel;
+  struct timeval hello_timeout;
+  struct timeval update_timeout;
+  struct timeval update_flush_timeout;
+  char name[IF_NAMESIZE];
+  unsigned char *ipv4;
+  int numll;
+  unsigned char (*ll)[16];
+  struct buffered buf;
+  struct buffered_update *buffered_updates;
+  int num_buffered_updates;
+  int update_bufsize;
+  time_t last_update_time;
+  unsigned short hello_seqno;
+  unsigned hello_interval;
+  unsigned update_interval;
+  /* A higher value means we forget old RTT samples faster. Must be
+     between 1 and 256, inclusive. */
+  unsigned int rtt_decay;
+  /* Parameters for computing the cost associated to RTT. */
+  unsigned int rtt_min;
+  unsigned int rtt_max;
+  unsigned int max_rtt_penalty;
 };
 
 #define IF_CONF(_ifp, _field) \
@@ -137,16 +141,18 @@ extern struct interface *interfaces;
 #define FOR_ALL_INTERFACES(_ifp) for(_ifp = interfaces; _ifp; _ifp = _ifp->next)
 
 static inline int
-if_up(struct interface *ifp)
+if_up (struct interface *ifp)
 {
-    return !!(ifp->flags & IF_UP);
+  return ! !(ifp->flags & IF_UP);
 }
 
-struct interface *add_interface(char *ifname, struct interface_conf *if_conf);
-int flush_interface(char *ifname);
-unsigned jitter(struct buffered *buf, int urgent);
-unsigned update_jitter(struct interface *ifp, int urgent);
-void set_timeout(struct timeval *timeout, int msecs);
-int interface_up(struct interface *ifp, int up);
-int interface_ll_address(struct interface *ifp, const unsigned char *address);
-void check_interfaces(void);
+struct interface *add_interface (char *ifname,
+				 struct interface_conf *if_conf);
+int flush_interface (char *ifname);
+unsigned jitter (struct buffered *buf, int urgent);
+unsigned update_jitter (struct interface *ifp, int urgent);
+void set_timeout (struct timeval *timeout, int msecs);
+int interface_up (struct interface *ifp, int up);
+int interface_ll_address (struct interface *ifp,
+			  const unsigned char *address);
+void check_interfaces (void);

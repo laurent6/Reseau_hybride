@@ -40,248 +40,252 @@ THE SOFTWARE.
 #include "net.h"
 
 int
-babel_socket(int port)
+babel_socket (int port)
 {
-    struct sockaddr_in6 sin6;
-    int s, rc;
-    int saved_errno;
-    int one = 1, zero = 0;
-    const int ds = 0xc0;        /* CS6 - Network Control */
+  struct sockaddr_in6 sin6;
+  int s, rc;
+  int saved_errno;
+  int one = 1, zero = 0;
+  const int ds = 0xc0;		/* CS6 - Network Control */
 
-    s = socket(PF_INET6, SOCK_DGRAM, 0);
-    if(s < 0)
-        return -1;
+  s = socket (PF_INET6, SOCK_DGRAM, 0);
+  if (s < 0)
+    return -1;
 
-    rc = setsockopt(s, IPPROTO_IPV6, IPV6_V6ONLY, &one, sizeof(one));
-    if(rc < 0)
-        goto fail;
+  rc = setsockopt (s, IPPROTO_IPV6, IPV6_V6ONLY, &one, sizeof (one));
+  if (rc < 0)
+    goto fail;
 
-    rc = setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
-    if(rc < 0)
-        goto fail;
+  rc = setsockopt (s, SOL_SOCKET, SO_REUSEADDR, &one, sizeof (one));
+  if (rc < 0)
+    goto fail;
 
-    rc = setsockopt(s, IPPROTO_IPV6, IPV6_MULTICAST_LOOP,
-                    &zero, sizeof(zero));
-    if(rc < 0)
-        goto fail;
+  rc = setsockopt (s, IPPROTO_IPV6, IPV6_MULTICAST_LOOP,
+		   &zero, sizeof (zero));
+  if (rc < 0)
+    goto fail;
 
-    rc = setsockopt(s, IPPROTO_IPV6, IPV6_UNICAST_HOPS,
-                    &one, sizeof(one));
-    if(rc < 0)
-        goto fail;
+  rc = setsockopt (s, IPPROTO_IPV6, IPV6_UNICAST_HOPS, &one, sizeof (one));
+  if (rc < 0)
+    goto fail;
 
-    rc = setsockopt(s, IPPROTO_IPV6, IPV6_MULTICAST_HOPS,
-                    &one, sizeof(one));
-    if(rc < 0)
-        goto fail;
+  rc = setsockopt (s, IPPROTO_IPV6, IPV6_MULTICAST_HOPS, &one, sizeof (one));
+  if (rc < 0)
+    goto fail;
 
 #ifdef IPV6_TCLASS
-    rc = setsockopt(s, IPPROTO_IPV6, IPV6_TCLASS, &ds, sizeof(ds));
+  rc = setsockopt (s, IPPROTO_IPV6, IPV6_TCLASS, &ds, sizeof (ds));
 #else
-    rc = -1;
-    errno = ENOSYS;
+  rc = -1;
+  errno = ENOSYS;
 #endif
-    if(rc < 0)
-        perror("Couldn't set traffic class");
+  if (rc < 0)
+    perror ("Couldn't set traffic class");
 
-    rc = fcntl(s, F_GETFL, 0);
-    if(rc < 0)
-        goto fail;
+  rc = fcntl (s, F_GETFL, 0);
+  if (rc < 0)
+    goto fail;
 
-    rc = fcntl(s, F_SETFL, (rc | O_NONBLOCK));
-    if(rc < 0)
-        goto fail;
+  rc = fcntl (s, F_SETFL, (rc | O_NONBLOCK));
+  if (rc < 0)
+    goto fail;
 
-    rc = fcntl(s, F_GETFD, 0);
-    if(rc < 0)
-        goto fail;
+  rc = fcntl (s, F_GETFD, 0);
+  if (rc < 0)
+    goto fail;
 
-    rc = fcntl(s, F_SETFD, rc | FD_CLOEXEC);
-    if(rc < 0)
-        goto fail;
+  rc = fcntl (s, F_SETFD, rc | FD_CLOEXEC);
+  if (rc < 0)
+    goto fail;
 
-    memset(&sin6, 0, sizeof(sin6));
-    sin6.sin6_family = AF_INET6;
-    sin6.sin6_port = htons(port);
-    rc = bind(s, (struct sockaddr*)&sin6, sizeof(sin6));
-    if(rc < 0)
-        goto fail;
+  memset (&sin6, 0, sizeof (sin6));
+  sin6.sin6_family = AF_INET6;
+  sin6.sin6_port = htons (port);
+  rc = bind (s, (struct sockaddr *) &sin6, sizeof (sin6));
+  if (rc < 0)
+    goto fail;
 
-    return s;
+  return s;
 
- fail:
-    saved_errno = errno;
-    close(s);
-    errno = saved_errno;
-    return -1;
+fail:
+  saved_errno = errno;
+  close (s);
+  errno = saved_errno;
+  return -1;
 }
 
 int
-babel_recv(int s, void *buf, int buflen, struct sockaddr *sin, int slen)
+babel_recv (int s, void *buf, int buflen, struct sockaddr *sin, int slen)
 {
-    struct iovec iovec;
-    struct msghdr msg;
-    int rc;
+  struct iovec iovec;
+  struct msghdr msg;
+  int rc;
 
-    memset(&msg, 0, sizeof(msg));
-    iovec.iov_base = buf;
-    iovec.iov_len = buflen;
-    msg.msg_name = sin;
-    msg.msg_namelen = slen;
-    msg.msg_iov = &iovec;
-    msg.msg_iovlen = 1;
+  memset (&msg, 0, sizeof (msg));
+  iovec.iov_base = buf;
+  iovec.iov_len = buflen;
+  msg.msg_name = sin;
+  msg.msg_namelen = slen;
+  msg.msg_iov = &iovec;
+  msg.msg_iovlen = 1;
 
-    rc = recvmsg(s, &msg, 0);
-    return rc;
+  rc = recvmsg (s, &msg, 0);
+  return rc;
 }
 
 int
-babel_send(int s,
-           const void *buf1, int buflen1, const void *buf2, int buflen2,
-           const struct sockaddr *sin, int slen)
+babel_send (int s,
+	    const void *buf1, int buflen1, const void *buf2, int buflen2,
+	    const struct sockaddr *sin, int slen)
 {
-    struct iovec iovec[2];
-    struct msghdr msg;
-    int rc, count = 0;
+  struct iovec iovec[2];
+  struct msghdr msg;
+  int rc, count = 0;
 
-    iovec[0].iov_base = (void*)buf1;
-    iovec[0].iov_len = buflen1;
-    iovec[1].iov_base = (void*)buf2;
-    iovec[1].iov_len = buflen2;
-    memset(&msg, 0, sizeof(msg));
-    msg.msg_name = (struct sockaddr*)sin;
-    msg.msg_namelen = slen;
-    msg.msg_iov = iovec;
-    msg.msg_iovlen = 2;
+  iovec[0].iov_base = (void *) buf1;
+  iovec[0].iov_len = buflen1;
+  iovec[1].iov_base = (void *) buf2;
+  iovec[1].iov_len = buflen2;
+  memset (&msg, 0, sizeof (msg));
+  msg.msg_name = (struct sockaddr *) sin;
+  msg.msg_namelen = slen;
+  msg.msg_iov = iovec;
+  msg.msg_iovlen = 2;
 
-    /* The Linux kernel can apparently keep returning EAGAIN indefinitely. */
+  /* The Linux kernel can apparently keep returning EAGAIN indefinitely. */
 
- again:
-    rc = sendmsg(s, &msg, 0);
-    if(rc < 0) {
-        if(errno == EINTR) {
-            count++;
-            if(count < 100)
-                goto again;
-        } else if(errno == EAGAIN) {
-            int rc2;
-            rc2 = wait_for_fd(1, s, 5);
-            if(rc2 > 0) {
-                count++;
-                if(count < 100)
-                    goto again;
-            }
-            errno = EAGAIN;
-        }
+again:
+  rc = sendmsg (s, &msg, 0);
+  if (rc < 0)
+    {
+      if (errno == EINTR)
+	{
+	  count++;
+	  if (count < 100)
+	    goto again;
+	}
+      else if (errno == EAGAIN)
+	{
+	  int rc2;
+	  rc2 = wait_for_fd (1, s, 5);
+	  if (rc2 > 0)
+	    {
+	      count++;
+	      if (count < 100)
+		goto again;
+	    }
+	  errno = EAGAIN;
+	}
     }
-    return rc;
+  return rc;
 }
 
 int
-tcp_server_socket(int port, int local)
+tcp_server_socket (int port, int local)
 {
-    struct sockaddr_in6 sin6;
-    int s, rc, saved_errno;
-    int one = 1;
+  struct sockaddr_in6 sin6;
+  int s, rc, saved_errno;
+  int one = 1;
 
-    s = socket(PF_INET6, SOCK_STREAM, 0);
-    if(s < 0)
-        return -1;
-
-    rc = setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
-    if(rc < 0)
-        goto fail;
-
-    rc = fcntl(s, F_GETFL, 0);
-    if(rc < 0)
-        goto fail;
-
-    rc = fcntl(s, F_SETFL, (rc | O_NONBLOCK));
-    if(rc < 0)
-        goto fail;
-
-    rc = fcntl(s, F_GETFD, 0);
-    if(rc < 0)
-        goto fail;
-
-    rc = fcntl(s, F_SETFD, rc | FD_CLOEXEC);
-    if(rc < 0)
-        goto fail;
-
-    memset(&sin6, 0, sizeof(sin6));
-    sin6.sin6_family = AF_INET6;
-    sin6.sin6_port = htons(port);
-    if(local) {
-        rc = inet_pton(AF_INET6, "::1", &sin6.sin6_addr);
-        if(rc < 0)
-            goto fail;
-    }
-    rc = bind(s, (struct sockaddr*)&sin6, sizeof(sin6));
-    if(rc < 0)
-        goto fail;
-
-    rc = listen(s, 2);
-    if(rc < 0)
-        goto fail;
-
-    return s;
-
- fail:
-    saved_errno = errno;
-    close(s);
-    errno = saved_errno;
+  s = socket (PF_INET6, SOCK_STREAM, 0);
+  if (s < 0)
     return -1;
+
+  rc = setsockopt (s, SOL_SOCKET, SO_REUSEADDR, &one, sizeof (one));
+  if (rc < 0)
+    goto fail;
+
+  rc = fcntl (s, F_GETFL, 0);
+  if (rc < 0)
+    goto fail;
+
+  rc = fcntl (s, F_SETFL, (rc | O_NONBLOCK));
+  if (rc < 0)
+    goto fail;
+
+  rc = fcntl (s, F_GETFD, 0);
+  if (rc < 0)
+    goto fail;
+
+  rc = fcntl (s, F_SETFD, rc | FD_CLOEXEC);
+  if (rc < 0)
+    goto fail;
+
+  memset (&sin6, 0, sizeof (sin6));
+  sin6.sin6_family = AF_INET6;
+  sin6.sin6_port = htons (port);
+  if (local)
+    {
+      rc = inet_pton (AF_INET6, "::1", &sin6.sin6_addr);
+      if (rc < 0)
+	goto fail;
+    }
+  rc = bind (s, (struct sockaddr *) &sin6, sizeof (sin6));
+  if (rc < 0)
+    goto fail;
+
+  rc = listen (s, 2);
+  if (rc < 0)
+    goto fail;
+
+  return s;
+
+fail:
+  saved_errno = errno;
+  close (s);
+  errno = saved_errno;
+  return -1;
 }
 
 int
-unix_server_socket(const char *path)
+unix_server_socket (const char *path)
 {
-    struct sockaddr_un sun;
-    int s, rc, saved_errno;
+  struct sockaddr_un sun;
+  int s, rc, saved_errno;
 
-    if(strlen(path) >= sizeof(sun.sun_path))
-        return -1;
+  if (strlen (path) >= sizeof (sun.sun_path))
+    return -1;
 
-    s = socket(PF_UNIX, SOCK_STREAM, 0);
-    if(s < 0)
-        return -1;
+  s = socket (PF_UNIX, SOCK_STREAM, 0);
+  if (s < 0)
+    return -1;
 
-    rc = fcntl(s, F_GETFL, 0);
-    if(rc < 0)
-        goto fail;
+  rc = fcntl (s, F_GETFL, 0);
+  if (rc < 0)
+    goto fail;
 
-    rc = fcntl(s, F_SETFL, rc | O_NONBLOCK);
-    if(rc < 0)
-        goto fail;
+  rc = fcntl (s, F_SETFL, rc | O_NONBLOCK);
+  if (rc < 0)
+    goto fail;
 
-    rc = fcntl(s, F_GETFD, 0);
-    if(rc < 0)
-        goto fail;
+  rc = fcntl (s, F_GETFD, 0);
+  if (rc < 0)
+    goto fail;
 
-    rc = fcntl(s, F_SETFD, rc | FD_CLOEXEC);
-    if(rc < 0)
-        goto fail;
+  rc = fcntl (s, F_SETFD, rc | FD_CLOEXEC);
+  if (rc < 0)
+    goto fail;
 
-    memset(&sun, 0, sizeof(sun));
-    sun.sun_family = AF_UNIX;
-    strncpy(sun.sun_path, path, sizeof(sun.sun_path));
-    rc = bind(s, (struct sockaddr *)&sun, sizeof(sun));
-    if(rc < 0)
-        goto fail;
+  memset (&sun, 0, sizeof (sun));
+  sun.sun_family = AF_UNIX;
+  strncpy (sun.sun_path, path, sizeof (sun.sun_path));
+  rc = bind (s, (struct sockaddr *) &sun, sizeof (sun));
+  if (rc < 0)
+    goto fail;
 
-    rc = listen(s, 2);
-    if(rc < 0)
-        goto fail_unlink;
+  rc = listen (s, 2);
+  if (rc < 0)
+    goto fail_unlink;
 
-    return s;
+  return s;
 
 fail_unlink:
-    saved_errno = errno;
-    unlink(path);
-    errno = saved_errno;
+  saved_errno = errno;
+  unlink (path);
+  errno = saved_errno;
 fail:
-    saved_errno = errno;
-    close(s);
-    errno = saved_errno;
-    return -1;
+  saved_errno = errno;
+  close (s);
+  errno = saved_errno;
+  return -1;
 }

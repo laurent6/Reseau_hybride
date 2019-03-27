@@ -34,11 +34,12 @@ struct xroute;
 
 #define LOCAL_BUFSIZE 1024
 
-struct local_socket {
-    int fd;
-    char *buf;
-    int n;
-    int monitor;
+struct local_socket
+{
+  int fd;
+  char *buf;
+  int n;
+  int monitor;
 };
 
 extern int local_server_socket;
@@ -47,11 +48,11 @@ extern int num_local_sockets;
 extern int local_server_port;
 extern char *local_server_path;
 
-void local_notify_interface(struct interface *ifp, int kind);
-void local_notify_neighbour(struct neighbour *neigh, int kind);
-void local_notify_xroute(struct xroute *xroute, int kind);
-void local_notify_route(struct babel_route *route, int kind);
-int local_read(struct local_socket *s);
-int local_header(struct local_socket *s);
-struct local_socket *local_socket_create(int fd);
-void local_socket_destroy(int i);
+void local_notify_interface (struct interface *ifp, int kind);
+void local_notify_neighbour (struct neighbour *neigh, int kind);
+void local_notify_xroute (struct xroute *xroute, int kind);
+void local_notify_route (struct babel_route *route, int kind);
+int local_read (struct local_socket *s);
+int local_header (struct local_socket *s);
+struct local_socket *local_socket_create (int fd);
+void local_socket_destroy (int i);

@@ -22,27 +22,28 @@ THE SOFTWARE.
 
 #define SOURCE_GC_TIME 200
 
-struct source {
-    unsigned char id[8];
-    unsigned char prefix[16];
-    unsigned char plen;
-    unsigned char src_prefix[16];
-    unsigned char src_plen;
-    unsigned short seqno;
-    unsigned short metric;
-    unsigned short route_count;
-    time_t time;
+struct source
+{
+  unsigned char id[8];
+  unsigned char prefix[16];
+  unsigned char plen;
+  unsigned char src_prefix[16];
+  unsigned char src_plen;
+  unsigned short seqno;
+  unsigned short metric;
+  unsigned short route_count;
+  time_t time;
 };
 
-struct source *find_source(const unsigned char *id,
-                           const unsigned char *prefix,
-                           unsigned char plen,
-                           const unsigned char *src_prefix,
-                           unsigned char src_plen,
-                           int create, unsigned short seqno);
-struct source *retain_source(struct source *src);
-void release_source(struct source *src);
-void update_source(struct source *src,
-                   unsigned short seqno, unsigned short metric);
-void expire_sources(void);
-void check_sources_released(void);
+struct source *find_source (const unsigned char *id,
+			    const unsigned char *prefix,
+			    unsigned char plen,
+			    const unsigned char *src_prefix,
+			    unsigned char src_plen,
+			    int create, unsigned short seqno);
+struct source *retain_source (struct source *src);
+void release_source (struct source *src);
+void update_source (struct source *src,
+		    unsigned short seqno, unsigned short metric);
+void expire_sources (void);
+void check_sources_released (void);

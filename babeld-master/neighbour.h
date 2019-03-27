@@ -20,35 +20,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-struct hello_history {
-    unsigned short reach;
-    unsigned short interval;    /* in centiseconds */
-    int seqno;
-    struct timeval time;
+struct hello_history
+{
+  unsigned short reach;
+  unsigned short interval;	/* in centiseconds */
+  int seqno;
+  struct timeval time;
 };
 
-struct neighbour {
-    struct neighbour *next;
-    /* This is -1 when unknown, so don't make it unsigned */
-    unsigned char address[16];
-    struct hello_history hello;
-    struct hello_history uhello; /* for Unicast hellos */
-    unsigned short txcost;
-    struct timeval ihu_time;
-    unsigned short ihu_interval;   /* in centiseconds */
-    /* Used for RTT estimation. */
-    /* Absolute time (modulo 2^32) at which the Hello was sent,
-       according to remote clock. */
-    unsigned int hello_send_us;
-    struct timeval hello_rtt_receive_time;
-    unsigned int rtt;
-    struct timeval rtt_time;
-    struct interface *ifp;
-    struct buffered buf;
+struct neighbour
+{
+  struct neighbour *next;
+  /* This is -1 when unknown, so don't make it unsigned */
+  unsigned char address[16];
+  struct hello_history hello;
+  struct hello_history uhello;	/* for Unicast hellos */
+  unsigned short txcost;
+  struct timeval ihu_time;
+  unsigned short ihu_interval;	/* in centiseconds */
+  /* Used for RTT estimation. */
+  /* Absolute time (modulo 2^32) at which the Hello was sent,
+     according to remote clock. */
+  unsigned int hello_send_us;
+  struct timeval hello_rtt_receive_time;
+  unsigned int rtt;
+  struct timeval rtt_time;
+  struct interface *ifp;
+  struct buffered buf;
     /******** CHANGE **********/
-    unsigned  add_metric_critical;
-    unsigned delay;
-    struct timeval last_delay_time;
+  unsigned add_metric_critical;
+  unsigned delay;
+  struct timeval last_delay_time;
 
     /*** END CHANGE ************/
 };
@@ -63,20 +65,20 @@ extern struct neighbour *neighs;
 #define FOR_ALL_NEIGHBOURS(_neigh) \
     for(_neigh = neighs; _neigh; _neigh = _neigh->next)
 /*******CHANGE *******/
-void set_add_metric_critical( struct  neighbour *neigh);
-void disable_metric_critical(struct  neighbour *neigh);
-int is_neighboor_critical(struct  neighbour *neigh);
+void set_add_metric_critical (struct neighbour *neigh);
+void disable_metric_critical (struct neighbour *neigh);
+int is_neighboor_critical (struct neighbour *neigh);
 
 /********* END CHANGE *****/
-int neighbour_valid(struct neighbour *neigh);
-void flush_neighbour(struct neighbour *neigh);
-struct neighbour *find_neighbour(const unsigned char *address,
-                                 struct interface *ifp);
-int update_neighbour(struct neighbour *neigh, struct hello_history *hist,
-                     int unicast, int hello, int hello_interval);
-unsigned check_neighbours(void);
-unsigned neighbour_txcost(struct neighbour *neigh);
-unsigned neighbour_rxcost(struct neighbour *neigh);
-unsigned neighbour_rttcost(struct neighbour *neigh);
-unsigned neighbour_cost(struct neighbour *neigh);
-int valid_rtt(struct neighbour *neigh);
+int neighbour_valid (struct neighbour *neigh);
+void flush_neighbour (struct neighbour *neigh);
+struct neighbour *find_neighbour (const unsigned char *address,
+				  struct interface *ifp);
+int update_neighbour (struct neighbour *neigh, struct hello_history *hist,
+		      int unicast, int hello, int hello_interval);
+unsigned check_neighbours (void);
+unsigned neighbour_txcost (struct neighbour *neigh);
+unsigned neighbour_rxcost (struct neighbour *neigh);
+unsigned neighbour_rttcost (struct neighbour *neigh);
+unsigned neighbour_cost (struct neighbour *neigh);
+int valid_rtt (struct neighbour *neigh);

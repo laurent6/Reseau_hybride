@@ -38,86 +38,90 @@ THE SOFTWARE.
          memcpy((_d), &(_dd), 4); } while(0)
 
 static inline int
-seqno_compare(unsigned short s1, unsigned short s2)
+seqno_compare (unsigned short s1, unsigned short s2)
 {
-    if(s1 == s2)
-        return 0;
-    else
-        return ((s2 - s1) & 0x8000) ? 1 : -1;
+  if (s1 == s2)
+    return 0;
+  else
+    return ((s2 - s1) & 0x8000) ? 1 : -1;
 }
 
 static inline short
-seqno_minus(unsigned short s1, unsigned short s2)
+seqno_minus (unsigned short s1, unsigned short s2)
 {
-    return (short)((s1 - s2) & 0xFFFF);
+  return (short) ((s1 - s2) & 0xFFFF);
 }
 
 static inline unsigned short
-seqno_plus(unsigned short s, int plus)
+seqno_plus (unsigned short s, int plus)
 {
-    return ((s + plus) & 0xFFFF);
+  return ((s + plus) & 0xFFFF);
 }
 
 /* Returns a time in microseconds on 32 bits (thus modulo 2^32,
    i.e. about 4295 seconds). */
 static inline unsigned int
-time_us(const struct timeval t)
+time_us (const struct timeval t)
 {
-    return (unsigned int) (t.tv_sec * 1000000 + t.tv_usec);
+  return (unsigned int) (t.tv_sec * 1000000 + t.tv_usec);
 }
 
-int roughly(int value);
-void timeval_minus(struct timeval *d,
-                   const struct timeval *s1, const struct timeval *s2);
-unsigned timeval_minus_msec(const struct timeval *s1, const struct timeval *s2)
-    ATTRIBUTE ((pure));
-void timeval_add_msec(struct timeval *d,
-                      const struct timeval *s, int msecs);
-int timeval_compare(const struct timeval *s1, const struct timeval *s2)
-    ATTRIBUTE ((pure));
-void timeval_min(struct timeval *d, const struct timeval *s);
-void timeval_min_sec(struct timeval *d, time_t secs);
-int parse_nat(const char *string) ATTRIBUTE ((pure));
-int parse_thousands(const char *string) ATTRIBUTE ((pure));
-void do_debugf(int level, const char *format, ...)
-    ATTRIBUTE ((format (printf, 2, 3))) COLD;
-int in_prefix(const unsigned char *restrict address,
-              const unsigned char *restrict prefix, unsigned char plen)
-    ATTRIBUTE ((pure));
-unsigned char *normalize_prefix(unsigned char *restrict ret,
-                                const unsigned char *restrict prefix,
-                                unsigned char plen);
-const char *format_address(const unsigned char *address);
-const char *format_prefix(const unsigned char *prefix, unsigned char plen);
-const char *format_eui64(const unsigned char *eui);
-const char *format_thousands(unsigned int value);
-int parse_address(const char *address, unsigned char *addr_r, int *af_r);
-int parse_net(const char *net, unsigned char *prefix_r, unsigned char *plen_r,
-              int *af_r);
-int parse_eui64(const char *eui, unsigned char *eui_r);
-int wait_for_fd(int direction, int fd, int msecs);
-int martian_prefix(const unsigned char *prefix, int plen) ATTRIBUTE ((pure));
-int linklocal(const unsigned char *address) ATTRIBUTE ((pure));
-int v4mapped(const unsigned char *address) ATTRIBUTE ((pure));
-void v4tov6(unsigned char *dst, const unsigned char *src);
-int daemonise(void);
-int set_src_prefix(unsigned char *src_addr, unsigned char *src_plen);
+int roughly (int value);
+void timeval_minus (struct timeval *d,
+		    const struct timeval *s1, const struct timeval *s2);
+unsigned
+timeval_minus_msec (const struct timeval *s1, const struct timeval *s2)
+ATTRIBUTE ((pure));
+     void timeval_add_msec (struct timeval *d,
+			    const struct timeval *s, int msecs);
+     int timeval_compare (const struct timeval *s1, const struct timeval *s2)
+  ATTRIBUTE ((pure));
+     void timeval_min (struct timeval *d, const struct timeval *s);
+     void timeval_min_sec (struct timeval *d, time_t secs);
+     int parse_nat (const char *string) ATTRIBUTE ((pure));
+     int parse_thousands (const char *string) ATTRIBUTE ((pure));
+     void do_debugf (int level, const char *format, ...)
+  ATTRIBUTE ((format (printf, 2, 3))) COLD;
+     int in_prefix (const unsigned char *restrict address,
+		    const unsigned char *restrict prefix, unsigned char plen)
+  ATTRIBUTE ((pure));
+     unsigned char *normalize_prefix (unsigned char *restrict ret,
+				      const unsigned char *restrict prefix,
+				      unsigned char plen);
+     const char *format_address (const unsigned char *address);
+     const char *format_prefix (const unsigned char *prefix,
+				unsigned char plen);
+     const char *format_eui64 (const unsigned char *eui);
+     const char *format_thousands (unsigned int value);
+     int parse_address (const char *address, unsigned char *addr_r,
+			int *af_r);
+     int parse_net (const char *net, unsigned char *prefix_r,
+		    unsigned char *plen_r, int *af_r);
+     int parse_eui64 (const char *eui, unsigned char *eui_r);
+     int wait_for_fd (int direction, int fd, int msecs);
+     int martian_prefix (const unsigned char *prefix,
+			 int plen) ATTRIBUTE ((pure));
+     int linklocal (const unsigned char *address) ATTRIBUTE ((pure));
+     int v4mapped (const unsigned char *address) ATTRIBUTE ((pure));
+     void v4tov6 (unsigned char *dst, const unsigned char *src);
+     int daemonise (void);
+     int set_src_prefix (unsigned char *src_addr, unsigned char *src_plen);
 
-static inline int
-is_default(const unsigned char *prefix, int plen)
+     static inline int is_default (const unsigned char *prefix, int plen)
 {
-    return plen == 0 || (plen == 96 && v4mapped(prefix));
+  return plen == 0 || (plen == 96 && v4mapped (prefix));
 }
 
-enum prefix_status {
-    PST_EQUALS = 0,
-    PST_DISJOINT,
-    PST_MORE_SPECIFIC,
-    PST_LESS_SPECIFIC
+enum prefix_status
+{
+  PST_EQUALS = 0,
+  PST_DISJOINT,
+  PST_MORE_SPECIFIC,
+  PST_LESS_SPECIFIC
 };
 enum prefix_status
-prefix_cmp(const unsigned char *p1, unsigned char plen1,
-           const unsigned char *p2, unsigned char plen2);
+prefix_cmp (const unsigned char *p1, unsigned char plen1,
+	    const unsigned char *p2, unsigned char plen2);
 
 /* If debugging is disabled, we want to avoid calling format_address
    for every omitted debugging message.  So debug is a macro.  But
@@ -131,8 +135,17 @@ prefix_cmp(const unsigned char *p1, unsigned char plen1,
 #define debugf(_args...) do {} while(0)
 #define kdebugf(_args...) do {} while(0)
 #else
-static inline void debugf(const char *format, ...) { return; }
-static inline void kdebugf(const char *format, ...) { return; }
+static inline void
+debugf (const char *format, ...)
+{
+  return;
+}
+
+static inline void
+kdebugf (const char *format, ...)
+{
+  return;
+}
 #endif
 
 #else
@@ -156,8 +169,17 @@ static inline void kdebugf(const char *format, ...) { return; }
         if(UNLIKELY(debug >= 3)) do_debugf(3, _args);   \
     } while(0)
 #else
-static inline void debugf(const char *format, ...) { return; }
-static inline void kdebugf(const char *format, ...) { return; }
+static inline void
+debugf (const char *format, ...)
+{
+  return;
+}
+
+static inline void
+kdebugf (const char *format, ...)
+{
+  return;
+}
 #endif
 
 #endif
