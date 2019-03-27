@@ -56,7 +56,14 @@ You can specify option, all option is specified in [man](babeld-master/babeld.ma
 	man {PATH_TO_PROJECT}/babeld-master/babeld.man
 
 
-## Running the tests
+## Tests
+
+###Architecture 
+![Alt text](archi_test.png?raw=true "Architecture test")
+
+![Alt text](new_archi.png?raw=true "Architecture performance test ")
+
+### running tests
 
 You can run the different tests in the directory [test](babeld-master/Tests/test)
 
