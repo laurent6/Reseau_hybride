@@ -1,4 +1,0 @@
-auto ens3
-iface ens3 inet6 static 
-	address 2001:db8:3c4d:6::1
-	netmask 64
