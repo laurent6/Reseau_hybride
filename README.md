@@ -7,7 +7,7 @@ Hybrid routing protocol for wireless mesh network based on [babeld protocol](htt
 
 ### Environment
 
-To run the protocol, you can use a physical network environment or you can use [Nemu](https://gitlab.com/v-a/nemu/tree/9155d1ba24307a5d8d00911c949565fdb836a2b9). ( WARNING : use commit 9155d1ba24307a5d8d00911c949565fdb836a2b9 . The latest version dosen't match with our startup script)  
+To run the protocol, you can use a physical network environment or you can use [Nemu](https://gitlab.com/v-a/nemu/tree/9155d1ba24307a5d8d00911c949565fdb836a2b9). (WARNING : use commit 9155d1ba24307a5d8d00911c949565fdb836a2b9 . The latest version doesn't work with our startup script)
 > Nemu is a distributed virtual network environment which fully runs without any administrative rights. It manages fleet of QEMU VMs in order to build a dynamic virtual topology. It provides self-script (launcher and interpreter) and a python API to create and manage heterogeneous, dynamic, distributed, collaborative and mobile virtual networks. 
 
 To install it, follow this [link](https://gitlab.com/v-a/nemu/wikis/tuto/install/debian).
@@ -16,14 +16,14 @@ To install it, follow this [link](https://gitlab.com/v-a/nemu/wikis/tuto/install
 
 To set an environment with Nemu, you need an image of Linux distributions (more help [here](https://gitlab.com/v-a/nemu/wikis/tuto/fs/debian)).
 
-After that, you need to create a script which specify the number of hosts and the connection between them. You can find a complete documention on this [link](https://gitlab.com/v-a/nemu/wikis/doc/basics).
+After that, you need to create a script that specify the number of hosts and the connection between them. You can find a complete documention on this [link](https://gitlab.com/v-a/nemu/wikis/doc/basics).
 You can generate a script which all virtual machine can communicate with wireless link.
 
 	{PATH_TO_PROJECT}/Wireless_env/generate_all_join.sh </path/of/image> <session_name> <nb_host>
 	
 ### Setting hosts
 
-You can automatise the configuration of IP address and Build and installation on hosts with [`install.sh`](Wireless_env/install.sh)
+You can automatise the configuration of IP address, build and installation on hosts with [`install.sh`](Wireless_env/install.sh)
 
 
 ## Build and installation
@@ -62,8 +62,8 @@ You can run the different tests in the directory [test](babeld-master/Tests/test
 
 	python3 {PATH_TO_PROJECT}/babeld-master/Tests/test/main.py -h
 
-> To test battery criteria with  -b option, use  nemu -f  initialisation_wireless.py -i ( don't forget change path_sys and session_name in this script )   
-> To Performance test  with -p option, use  nemu -f init_all_join.py -i ( init_all_join.py is the script generate by generate_all_join.sh ) 
+> To test battery criteria with -b option, use ```nemu -f initialisation_wireless.py -i``` (don't forget change path_sys and session_name in this script)
+> To Performance test with -p option, use ```nemu -f init_all_join.py -i``` (init_all_join.py is the script generate by generate_all_join.sh) 
 
 
 <h3>  Authors  </h3>
