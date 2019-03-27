@@ -62,5 +62,5 @@ You can run the different tests in the directory [test](babeld-master/Tests/test
 
 	python3 {PATH_TO_PROJECT}/babeld-master/Tests/test/main.py -h
 
-> To test battery criteria with  -b option, use  nemu -f  initialisation_wireless.py -i ( don't forget change path_sys and session_name ins this script )   
+> To test battery criteria with  -b option, use  nemu -f  initialisation_wireless.py -i ( don't forget change path_sys and session_name in this script )   
 > To Performance test  with -p option, use  nemu -f init_all_join.py -i 
